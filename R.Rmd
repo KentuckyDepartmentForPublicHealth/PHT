@@ -1,0 +1,97 @@
+# ajb
+
+```{r settings}
+
+source("../Sandbox/adam-utils/sysOpsLibsFuncs.R")
+
+```
+
+
+
+```{r db}
+
+con <- dbConnect(
+  odbc::odbc(),
+  Driver = "PostgreSQL ANSI",
+  Database = 'ajb',
+  UID = 'postgres',
+  PWD = 'Qwer!234',
+  Port = 5432,
+  timeout = 10
+)
+
+message('printing dB info..'); dbGetInfo(con)
+
+message('printing dB objects..'); dbListObjects(con)
+
+message('printing dB tables..'); dbListTables(con)
+
+# dbDisconnect(con)
+
+```
+
+
+
+```{r}
+
+
+
+
+
+
+
+
+```
+
+
+
+```{r}
+
+
+
+
+
+
+
+
+```
+
+
+
+```{r}
+
+
+
+
+
+
+
+
+```
+
+
+
+```{r}
+
+
+
+
+
+
+
+
+```
+
+
+
+```{r}
+
+
+
+
+
+
+
+
+```
+
