@@ -8,7 +8,10 @@ library(bsicons)
 library(shinyjs)
 library(thematic)
 library(ggplot2)
-
+library(magrittr)
+library(dplyr)
+library(leaflet)
+library(sf)
 
 # deploy ------------------------------------------------------------------
 
@@ -25,6 +28,9 @@ library(ggplot2)
 
 thematic_shiny(font = "auto")
 
+load(file = 'dat/ky_joined.RData')
+qpal_cases <- colorFactor(palette = c('green', 'red'), domain = ky_counties_joined$Compliance.Status)
+
 
 link_shiny <- tags$a(
   shiny::icon("github"), "Shiny",
@@ -37,4 +43,20 @@ link_posit <- tags$a(
   target = "_blank"
 )
 
+
+# leaflet -----------------------------------------------------------------
+
+
+# library(tigris)
+# ky_counties <- counties(state = 'KY') %>%
+#   sf::st_transform(crs = 'WGS84') %>%
+#   mutate(across(NAME, ~ toupper(.x)))
+# saveRDS(ky_counties, 'dat/ky_counties.rds')
+# ky_counties <- readRDS('dat/ky_counties.rds')
+# lnaDat <- read.csv('dat/jul82024-lna-online.csv')
+# saveRDS(lnaDat, 'dat/lnaDat.rds')
+# lnaDat <- readRDS('dat/lnaDat.rds')
+# ky_counties_joined <- sp::merge(ky_counties, lnaDat, by.x = 'NAME', by.y = 'County') %>% 
+#  sf::st_as_sf(coords = c("lon", "lat"), crs = 4326)
+# save(ky_counties_joined, lnaDat, file = 'dat/ky_joined.RData')
 

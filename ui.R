@@ -13,9 +13,8 @@ nav_panel(
   ),
 nav_panel(
   title = 'Map',
-  p('2 content')
+  leafletOutput('map')
 ),
-nav_spacer(),
 nav_menu(
   title = "Links",
   align = "right",
@@ -24,7 +23,7 @@ nav_menu(
 ),
 nav_spacer(),
 nav_item(
-  input_dark_mode(mode = "dark") #id = "dark_mode", 
+  input_dark_mode(id = "dark_mode", mode = "dark") #
 ),
 nav_item(
   tags$a('KDPH', href = 'https://kde.org', target = '_blank')
