@@ -1,8 +1,30 @@
+
+
+# libs --------------------------------------------------------------------
+
 library(shiny)
 library(bslib)
 library(bsicons)
 library(shinyjs)
 library(thematic)
+library(ggplot2)
+
+
+# deploy ------------------------------------------------------------------
+
+# rsconnect::deployApp(
+#   account = 'kdph',
+#   appName = 'pht-dashboard',
+#   appVisibility = 'private',
+#   logLevel = 'verbose'
+# )
+
+
+# boilerplate -------------------------------------------------------------
+
+
+thematic_shiny(font = "auto")
+
 
 link_shiny <- tags$a(
   shiny::icon("github"), "Shiny",
@@ -14,3 +36,5 @@ link_posit <- tags$a(
   href = "https://posit.co",
   target = "_blank"
 )
+
+

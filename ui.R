@@ -1,26 +1,21 @@
 
-ui <- tagList(
-  useShinyjs(),
-  page_navbar(
+ui <- page_navbar(
   title = 'Public Health Transformation (PHT) Dashboard',
-theme = bs_theme(5, 'cosmo'),
-header = 'Content header',
-footer = 'Content footer',
+  useShinyjs(),
+  theme = bs_theme(5, 'cosmo'),
+header = NULL,
+footer = 'Last update: July 25, 2024 at 11:15 AM EST',
 
-inlineCSS('.yy {padding: 0; margin 0; color: red; text-align: center;}'),
-
+# inlineCSS('.yy {padding: 0; margin 0; color: red; text-align: center;}'),
 nav_panel(
-    title = 'One',
-    p('1 content')
+  title = 'Table',
+  plotOutput('plot')
   ),
 nav_panel(
-  title = 'Two',
+  title = 'Map',
   p('2 content')
 ),
-nav_panel(
-  title = 'Three',
-  p('3 content')
-),
+nav_spacer(),
 nav_menu(
   title = "Links",
   align = "right",
@@ -28,17 +23,15 @@ nav_menu(
   nav_item(link_posit)
 ),
 nav_spacer(),
-nav_menu(
-  'Dark/Light Mode',
-  icon = bs_icon('toggle-on'),
-    nav_item(
-      class = 'yy',
-      input_dark_mode(mode = 'light')
-    )
+nav_item(
+  input_dark_mode(mode = "dark") #id = "dark_mode", 
+),
+nav_item(
+  tags$a('KDPH', href = 'https://kde.org', target = '_blank')
 ),
   sidebar = sidebar(
-
-    selectInput("var", "Select variable", choices = mtcars |> names())
+    selectInput("var", "Select variable", choices = mtcars |> names()),
+    hr(),
+    selectInput("var2", "Select variable", choices = mtcars |> names())
   )
-)
 )
