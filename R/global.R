@@ -29,7 +29,10 @@ library(sf)
 thematic_shiny(font = "auto")
 
 load(file = 'dat/ky_joined.RData')
-qpal_cases <- colorFactor(palette = c('green', 'red'), domain = ky_counties_joined$Compliance.Status)
+
+ky_counties_joined$Compliance.Status<- ifelse(ky_counties_joined$Compliance.Status == 1, 'Yes', 'No') 
+
+qpal_cases <- colorFactor(palette = c('red', 'green'), domain = ky_counties_joined$Compliance.Status)
 
 
 link_shiny <- tags$a(

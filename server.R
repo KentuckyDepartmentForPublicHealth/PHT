@@ -7,6 +7,18 @@ server <- function(input, output, session) {
     ggplot(aes(!!sym(input$var), !!sym(input$var2))) +
       geom_point(size = 5) +
       theme_classic(base_size = 18) +
+      labs(title = 'This is the first chart') +
+      theme(
+        axis.text = element_text(size = 18)
+      )
+  })
+  
+  output$plot2 <- renderPlot({
+    mtcars |>
+      ggplot(aes(!!sym(input$var), !!sym(input$var2), color = factor(cyl))) +
+      geom_point(size = 5) +
+      theme_classic(base_size = 18) +
+      labs(title = 'This is a second chart') +
       theme(
         axis.text = element_text(size = 18)
       )
@@ -29,7 +41,7 @@ server <- function(input, output, session) {
         ) %>%
           lapply(htmltools::HTML)
       ) %>% 
-      addLegend(title = HTML(paste0("<span style='color: #0C3151; font-size: 1.2em;'>", 'This is a title',"</span>")),
+      addLegend(title = HTML(paste0("<span style='color: #0C3151; font-size: 1.2em;'>", 'Compliant?',"</span>")),
                 position = 'bottomright',
                 values = ~Compliance.Status, # change here
                 # pal =  qpal_cases(), # app WORKS
@@ -37,6 +49,7 @@ server <- function(input, output, session) {
                 pal = qpal_cases, # interactive
                 opacity = 1
       ) %>% 
+      addControl('Title 902 | Chapter 008 | Regulation 160', position = 'topright') %>% 
      {if (input$dark_mode %in% 'dark') {leaflet.extras::setMapWidgetStyle(., list(background= 'black'))} else {leaflet.extras::setMapWidgetStyle(., list(background= 'white'))} } 
     })
   })
