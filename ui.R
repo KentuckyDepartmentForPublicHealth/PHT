@@ -1,20 +1,17 @@
 
-ui <- tagList(
-  useShinyjs(),
-  page_navbar(
+ui <- page_navbar(
   title = 'Public Health Transformation (PHT) Dashboard',
-  
   theme = bs_theme(5, 'cosmo'),
   header = NULL,
-  footer = 'Last update: July 25, 2024 at 11:15 AM EST',
-  
-inlineCSS('
-  .yy {padding: 0; margin 0; color: red; text-align: center;}
-  .leaflet .info {font-size: 2em;}      
-          '),
+  footer = currentDate,
+
   nav_panel(
     title = 'Map',
+    tags$head(
+      tags$link(rel = "stylesheet", type = "text/css", href = "PHT.css")
+    ),
     leafletOutput('map')
+
   ),
   nav_panel(
     title = 'Charts',
@@ -41,6 +38,5 @@ inlineCSS('
     selectInput("var", "Select variable", choices = mtcars |> names()),
     hr(),
     selectInput("var2", "Select variable", choices = mtcars |> names())
-  )
   )
 )

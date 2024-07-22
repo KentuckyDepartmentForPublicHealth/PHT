@@ -26,6 +26,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$dark_mode, {
   output$map <- renderLeaflet({ 
+    
     leaflet(ky_counties_joined) %>% 
       addPolygons(
         fillColor = ~qpal_cases(Compliance.Status),
@@ -49,8 +50,10 @@ server <- function(input, output, session) {
                 pal = qpal_cases, # interactive
                 opacity = 1
       ) %>% 
+      # addMarkers(lng = ~ as.numeric(unlist(INTPTLON)), lat = ~ as.numeric(unlist(INTPTLAT)),
+      #            popup='<a href="https://www.r-project.org/">R Project</a>') %>% 
       addControl('Title 902 | Chapter 008 | Regulation 160', position = 'topright') %>% 
      {if (input$dark_mode %in% 'dark') {leaflet.extras::setMapWidgetStyle(., list(background= 'black'))} else {leaflet.extras::setMapWidgetStyle(., list(background= 'white'))} } 
-    })
-  })
+    }) # end renderLeaflet
+  }) # end observeEvent
 }
