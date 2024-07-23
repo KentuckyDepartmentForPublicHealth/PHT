@@ -1,4 +1,7 @@
 .leaflet .info {
-  font-size: 2em;
-  color: orange;
+  font-size: 1.5em;
+  color: black;
+  margin: 1em;
+  padding: 1em;
+  border: 2px solid black;
 }

@@ -3,10 +3,11 @@ ui <- page_navbar(
   title = 'Public Health Transformation (PHT) Dashboard',
   theme = bs_theme(5, 'cosmo'),
   header = NULL,
-  footer = currentDate,
+  footer = paste('Last updated:', currentDate),
 
+  nav_spacer(),
   nav_panel(
-    title = 'Map',
+    title = 'Map', icon = icon('map'),
     tags$head(
       tags$link(rel = "stylesheet", type = "text/css", href = "PHT.css")
     ),
@@ -14,7 +15,7 @@ ui <- page_navbar(
 
   ),
   nav_panel(
-    title = 'Charts',
+    title = 'Charts', icon = icon('chart-column'),
   layout_columns(  
     plotOutput('plot'),
     plotOutput('plot2'),
@@ -22,20 +23,19 @@ ui <- page_navbar(
     )
   ),
   nav_menu(
-    title = "Links",
+    title = "Links", icon = icon('link'),
     align = "right",
     nav_item(link_shiny),
     nav_item(link_posit)
   ),
-  nav_spacer(),
   nav_item(
     input_dark_mode(id = "dark_mode", mode = "dark") #
   ),
   nav_item(
-    tags$a('KDPH', href = 'https://www.chfs.ky.gov/agencies/dph/Pages/default.aspx', target = '_blank')
+    tags$a('KDPH', title = 'Kentucky Department for Public Health', href = 'https://www.chfs.ky.gov/agencies/dph/Pages/default.aspx', target = '_blank')
   ),
   sidebar = sidebar(
-    selectInput("var", "Select variable", choices = mtcars |> names()),
+    selectInput("var", "Select variable",  choices = mtcars |> names()),
     hr(),
     selectInput("var2", "Select variable", choices = mtcars |> names())
   )

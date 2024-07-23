@@ -36,7 +36,7 @@ server <- function(input, output, session) {
         label = sprintf("%s",
                         paste('<span style="font-size: 1.5em">',
                               "<b>Geography: </b>", ky_counties_joined$NAME, '<br>',
-                              # "<b>Variable: </b>", chosen_data()$variable2, '<br>',
+                              # "<b>Variable: </b>", a('link', href = 'kde.org', target='_blank'), '<br>',
                               "<b>Status: </b>", ky_counties_joined$Compliance.Status, '</span>'
                         )
         ) %>%
@@ -50,9 +50,11 @@ server <- function(input, output, session) {
                 pal = qpal_cases, # interactive
                 opacity = 1
       ) %>% 
+      {if (!ky_counties_joined$NAME[7] %in% "BELL") {addMarkers(., lng = ~ as.numeric(unlist(INTPTLON)), lat = ~ as.numeric(unlist(INTPTLAT)),
+              popup='<a href="https://www.r-project.org/">R Project</a>')} else .} %>%
       # addMarkers(lng = ~ as.numeric(unlist(INTPTLON)), lat = ~ as.numeric(unlist(INTPTLAT)),
       #            popup='<a href="https://www.r-project.org/">R Project</a>') %>% 
-      addControl('Title 902 | Chapter 008 | Regulation 160', position = 'topright') %>% 
+      addControl(paste('Title 902 | Chapter 008 | Regulation 160',br(), br(), 'Local Needs Assessment'), position = 'topright') %>% 
      {if (input$dark_mode %in% 'dark') {leaflet.extras::setMapWidgetStyle(., list(background= 'black'))} else {leaflet.extras::setMapWidgetStyle(., list(background= 'white'))} } 
     }) # end renderLeaflet
   }) # end observeEvent
