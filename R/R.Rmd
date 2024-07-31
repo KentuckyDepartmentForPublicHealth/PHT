@@ -2,7 +2,7 @@
 
 ```{r settings}
 
-source("../Sandbox/adam-utils/sysOpsLibsFuncs.R")
+source("../../adam-utils/sysOpsLibsFuncs.R")
 
 ```
 
@@ -34,9 +34,9 @@ message('printing dB tables..'); dbListTables(con)
 
 ```{r}
 
+library(REDCapR)
 
-
-
+raw <- redcap_read_oneshot("https://redcap.chfs.ky.gov/api/", key, raw_or_label = "label")$data
 
 
 
