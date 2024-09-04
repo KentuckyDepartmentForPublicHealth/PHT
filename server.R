@@ -1,6 +1,10 @@
 
 
 server <- function(input, output, session) {
+
+  # Activate thematic
+  thematic::thematic_on(font = "Roboto")
+
   
   output$plot <- renderPlot({
     mtcars |>
@@ -27,35 +31,46 @@ server <- function(input, output, session) {
   observeEvent(input$dark_mode, {
   output$map <- renderLeaflet({ 
     
-    leaflet(ky_counties_joined) %>% 
+    leaflet(shapefile) %>% 
       addPolygons(
-        fillColor = ~qpal_cases(Compliance.Status),
+        fillColor = ~qpal(Compliance.Status),
         fillOpacity = 1,
         color = 'black',
-        weight = 1,
-        label = sprintf("%s",
-                        paste('<span style="font-size: 1.5em">',
-                              "<b>Geography: </b>", ky_counties_joined$NAME, '<br>',
-                              # "<b>Variable: </b>", a('link', href = 'kde.org', target='_blank'), '<br>',
-                              "<b>Status: </b>", ky_counties_joined$Compliance.Status, '</span>'
-                        )
-        ) %>%
-          lapply(htmltools::HTML)
+        weight = 1
+        # label = sprintf("%s",
+        #                 paste('<span style="font-size: 1.5em">',
+        #                       "<b>Geography: </b>", ky_counties_joined$NAME, '<br>',
+        #                       # "<b>Variable: </b>", a('link', href = 'kde.org', target='_blank'), '<br>',
+        #                       "<b>Status: </b>", ky_counties_joined$Compliance.Status, '</span>'
+        #                 )
+        # ) %>%
+        #   lapply(htmltools::HTML)
       ) %>% 
-      addLegend(title = HTML(paste0("<span style='color: #0C3151; font-size: 1.2em;'>", 'Compliant?',"</span>")),
-                position = 'bottomright',
-                values = ~Compliance.Status, # change here
-                # pal =  qpal_cases(), # app WORKS
-                # pal =  isolate(qpal_cases()), # app WORKS
-                pal = qpal_cases, # interactive
-                opacity = 1
+      # addLegend(title = HTML(paste0("<span style='color: #0C3151; font-size: 1.2em;'>", 'Compliant?',"</span>")),
+      #           position = 'bottomright',
+      #           values = ~Compliance.Status, # change here
+      #           # pal =  qpal_cases(), # app WORKS
+      #           # pal =  isolate(qpal_cases()), # app WORKS
+      #           pal = qpal_cases, # interactive
+      #           opacity = 1
+      # ) %>% 
+      # addMarkers(., lng = ~ as.numeric(unlist(INTPTLON10)), lat = ~ as.numeric(unlist(INTPTLAT10)),
+      #            popup='<a href="https://www.r-project.org/" target="_blank">R Project</a>') %>%
+      addMarkers(lng = centroid_coords[, 1], lat = centroid_coords[, 2]) %>% 
+      addLabelOnlyMarkers(
+        lng = centroid_coords[, 1], lat = centroid_coords[, 2],
+        label = ~ NAMELSAD10, 
+        icon = NULL,
+        labelOptions = labelOptions(
+          noHide = TRUE,
+          sticky=F,
+          textsize = '12px', 
+          textOnly = T,
+          style = list("color" = 'gray20')
+        )
       ) %>% 
-      {if (!ky_counties_joined$NAME[7] %in% "BELL") {addMarkers(., lng = ~ as.numeric(unlist(INTPTLON)), lat = ~ as.numeric(unlist(INTPTLAT)),
-              popup='<a href="https://www.r-project.org/">R Project</a>')} else .} %>%
-      # addMarkers(lng = ~ as.numeric(unlist(INTPTLON)), lat = ~ as.numeric(unlist(INTPTLAT)),
-      #            popup='<a href="https://www.r-project.org/">R Project</a>') %>% 
-      addControl(paste('Title 902 | Chapter 008 | Regulation 160',br(), br(), 'Local Needs Assessment'), position = 'topright') %>% 
-     {if (input$dark_mode %in% 'dark') {leaflet.extras::setMapWidgetStyle(., list(background= 'black'))} else {leaflet.extras::setMapWidgetStyle(., list(background= 'white'))} } 
+      # addControl(paste('Title 902 | Chapter 008 | Regulation 160',br(), br(), 'Local Needs Assessment'), position = 'topright') %>% 
+     {if (input$dark_mode %in% 'dark') {leaflet.extras::setMapWidgetStyle(., list(background= '#454545'))} else {leaflet.extras::setMapWidgetStyle(., list(background= 'white'))} } 
     }) # end renderLeaflet
   }) # end observeEvent
 }
