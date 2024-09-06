@@ -35,8 +35,8 @@ server <- function(input, output, session) {
       addPolygons(
         fillColor = ~qpal(Compliance.Status),
         fillOpacity = 1,
-        color = 'black',
-        weight = 1
+        color = 'white',
+        weight = 2
         # label = sprintf("%s",
         #                 paste('<span style="font-size: 1.5em">',
         #                       "<b>Geography: </b>", ky_counties_joined$NAME, '<br>',
@@ -55,9 +55,10 @@ server <- function(input, output, session) {
       #           opacity = 1
       # ) %>% 
       addMarkers(.,
-                 lng = ~ as.numeric(unlist(INTPTLON10)), 
-                 lat = ~ as.numeric(unlist(INTPTLAT10)),
-                 popup = sprintf('<a href="%s">Download it</a>', serve_submissions)) %>%
+                 lng = centroid_coords[, 1], #~ as.numeric(unlist(INTPTLON10)), 
+                 lat = centroid_coords[, 2], #~ as.numeric(unlist(INTPTLAT10)),
+                 popup = PoPuP
+        ) %>%
       # addMarkers(lng = centroid_coords[, 1], lat = centroid_coords[, 2]) %>% 
       addLabelOnlyMarkers(
         lng = centroid_coords[, 1], lat = centroid_coords[, 2],
@@ -68,7 +69,7 @@ server <- function(input, output, session) {
           sticky=F,
           textsize = '10px', 
           textOnly = T,
-          style = list("color" = 'gray20')
+          style = list("color" = 'gray50')
         )
       ) %>% 
       setView(., lng = -85.711244, lat = 37.735969, zoom = 8) %>% 

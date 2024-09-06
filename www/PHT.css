@@ -5,3 +5,7 @@
   padding: 1em;
   border: 2px solid black;
 }
+
+.card-body {
+  #background-color: #001F3F  ;
+}

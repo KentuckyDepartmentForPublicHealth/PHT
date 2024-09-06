@@ -74,7 +74,7 @@ centroids <- st_centroid(shapefile)
 centroid_coords <- st_coordinates(centroids)
 shapefile$Compliance.Status <- sample(c('Yes','No','Yes','Yes','Yes','Yes'), 61, replace = T)
 # pal <- colorNumeric(palette = "viridis", domain = shapefile$FID)
-qpal <- colorFactor(palette = c('red', 'green'), domain = shapefile$Compliance.Status)
+qpal <- colorFactor(palette = c('#004080', '#001F3F'), domain = shapefile$Compliance.Status)
 
 # leaflet() %>%
 #   addTiles() %>%
@@ -85,5 +85,11 @@ qpal <- colorFactor(palette = c('red', 'green'), domain = shapefile$Compliance.S
 #               fillOpacity = 0.5,
 #               popup = ~paste("Population: ", FID))
 
-working <- getwd()
-serve_submissions <- paste0('/subs/', list.files('www/subs/'))
+serve_submissions1 <- paste0('subs/', list.files('www/subs/'))
+serve_submissions2 <- paste0('hubs/', list.files('www/hubs/'))
+
+PoPuP <- sprintf(
+    '<a href="%s" target="_blank">Download 1</a><br><a href="%s" target="_blank">Download 2</a>',
+    serve_submissions1,
+    serve_submissions2
+  )

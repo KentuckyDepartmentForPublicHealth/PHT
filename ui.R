@@ -19,7 +19,7 @@ ui <- page_navbar(
     h1('Interactive Map'),
     h4('Kentucky Health Departments'),
     navset_card_tab(
-      #height = 250,
+      height = 1000,
       full_screen = TRUE,
       title = NULL,
       nav_panel(
