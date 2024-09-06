@@ -3,7 +3,7 @@
 server <- function(input, output, session) {
 
   # Activate thematic
-  thematic::thematic_on(font = "Roboto")
+  thematic::thematic_on(font = "auto")
 
   
   output$plot <- renderPlot({
@@ -54,9 +54,11 @@ server <- function(input, output, session) {
       #           pal = qpal_cases, # interactive
       #           opacity = 1
       # ) %>% 
-      # addMarkers(., lng = ~ as.numeric(unlist(INTPTLON10)), lat = ~ as.numeric(unlist(INTPTLAT10)),
-      #            popup='<a href="https://www.r-project.org/" target="_blank">R Project</a>') %>%
-      addMarkers(lng = centroid_coords[, 1], lat = centroid_coords[, 2]) %>% 
+      addMarkers(.,
+                 lng = ~ as.numeric(unlist(INTPTLON10)), 
+                 lat = ~ as.numeric(unlist(INTPTLAT10)),
+                 popup = sprintf('<a href="%s">Download it</a>', serve_submissions)) %>%
+      # addMarkers(lng = centroid_coords[, 1], lat = centroid_coords[, 2]) %>% 
       addLabelOnlyMarkers(
         lng = centroid_coords[, 1], lat = centroid_coords[, 2],
         label = ~ NAMELSAD10, 
@@ -64,11 +66,12 @@ server <- function(input, output, session) {
         labelOptions = labelOptions(
           noHide = TRUE,
           sticky=F,
-          textsize = '12px', 
+          textsize = '10px', 
           textOnly = T,
           style = list("color" = 'gray20')
         )
       ) %>% 
+      setView(., lng = -85.711244, lat = 37.735969, zoom = 8) %>% 
       # addControl(paste('Title 902 | Chapter 008 | Regulation 160',br(), br(), 'Local Needs Assessment'), position = 'topright') %>% 
      {if (input$dark_mode %in% 'dark') {leaflet.extras::setMapWidgetStyle(., list(background= '#454545'))} else {leaflet.extras::setMapWidgetStyle(., list(background= 'white'))} } 
     }) # end renderLeaflet

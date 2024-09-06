@@ -5,8 +5,8 @@ ui <- page_navbar(
     style = 'vertical-align: middle;'
   ),
   # title = 'Public Health Transformation (PHT) Dashboard',
-  theme = bs_theme(5, 'cerulean', base_font = font_google("Roboto")),
-  header = NULL, #HTML('<a href = "https://www.chfs.ky.gov/agencies/dph/Pages/default.aspx" target="_blank"><img src="dph.png" width = "20%"></a>'),
+  theme = bs_theme(5, 'cerulean', base_font = font_google("Inter")),
+  header = NULL,
   footer = paste('Last updated:', currentDate),
 
   nav_spacer(),
@@ -16,10 +16,28 @@ ui <- page_navbar(
     tags$head(
       tags$link(rel = "stylesheet", type = "text/css", href = "PHT.css")
     ),
-    h1('Interactive map tool'),
-    h4('Obtain information about each local health department/district'),
-    leafletOutput('map'),
-
+    h1('Interactive Map'),
+    h4('Kentucky Health Departments'),
+    navset_card_tab(
+      #height = 250,
+      full_screen = TRUE,
+      title = NULL,
+      nav_panel(
+        "Main",
+        card_title("Click on the location for more resources"),
+        leafletOutput('map')
+      ),
+      nav_panel(
+        "Extra",
+        card_title("A leaflet plot")
+        #leaflet_widget
+      ),
+      nav_panel(
+        shiny::icon("circle-info"),
+        markdown(HTML('<p>Contact the dashboard <a href="mailto:adam.berrones@ky.gov">developer</a>'))
+      )
+    )
+    
 
   ),
   # nav_panel(

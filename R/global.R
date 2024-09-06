@@ -84,3 +84,6 @@ qpal <- colorFactor(palette = c('red', 'green'), domain = shapefile$Compliance.S
 #               opacity = 1,
 #               fillOpacity = 0.5,
 #               popup = ~paste("Population: ", FID))
+
+working <- getwd()
+serve_submissions <- paste0('/subs/', list.files('www/subs/'))
