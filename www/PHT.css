@@ -9,3 +9,12 @@
 .card-body {
   #background-color: #001F3F  ;
 }
+
+/*.navset-card-tab .leaflet-container {
+  height: 100% !important;
+  min-height: 1200px !important;
+}*/
+/*#map {
+  height: 1400px !important;
+  width: 100% !important;
+}*/

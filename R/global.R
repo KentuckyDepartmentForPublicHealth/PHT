@@ -85,11 +85,29 @@ qpal <- colorFactor(palette = c('#004080', '#001F3F'), domain = shapefile$Compli
 #               fillOpacity = 0.5,
 #               popup = ~paste("Population: ", FID))
 
+serve_submissions1 <- vector('list', 61)
+
 serve_submissions1 <- paste0('subs/', list.files('www/subs/'))
-serve_submissions2 <- paste0('hubs/', list.files('www/hubs/'))
+serve_submissions2 <- paste0('hubs/', list.files('www/hubs/')[1:30])
+
+
+serve_submissions1
+sprintf("%02d", 1:61)
+
+dat <- tibble(
+  serve_submissions1
+) %>% 
+  mutate(
+    served1 = ifelse(grepl( sprintf("%02d", 1:61), ), '1', '2')
+  )
+
+Ziggy <- function(titled, X =serve_submissions1) {
 
 PoPuP <- sprintf(
-    '<a href="%s" target="_blank">Download 1</a><br><a href="%s" target="_blank">Download 2</a>',
-    serve_submissions1,
-    serve_submissions2
-  )
+  paste0('<a href="%s" target="_blank">', titled, '</a>'),
+    X
+)
+PoPuP
+}
+
+Ziggy('Download files')

@@ -69,7 +69,7 @@ server <- function(input, output, session) {
           sticky=F,
           textsize = '10px', 
           textOnly = T,
-          style = list("color" = 'gray50')
+          style = list("color" = 'white')
         )
       ) %>% 
       setView(., lng = -85.711244, lat = 37.735969, zoom = 8) %>% 

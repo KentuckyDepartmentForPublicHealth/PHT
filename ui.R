@@ -24,7 +24,7 @@ ui <- page_navbar(
       title = NULL,
       nav_panel(
         "Main",
-        card_title("Click on the location for more resources"),
+        card_title("Click on the location marker for more information"),
         leafletOutput('map')
       ),
       nav_panel(
