@@ -74,7 +74,9 @@ centroids <- st_centroid(shapefile)
 centroid_coords <- st_coordinates(centroids)
 shapefile$Compliance.Status <- sample(c('Yes','No','Yes','Yes','Yes','Yes'), 61, replace = T)
 # pal <- colorNumeric(palette = "viridis", domain = shapefile$FID)
-qpal <- colorFactor(palette = c('#004080', '#001F3F'), domain = shapefile$Compliance.Status)
+# qpal <- colorFactor(palette = c('#004080', '#001F3F'), domain = shapefile$Compliance.Status)
+qpal <- colorFactor(palette = c('gray80', 'gray95'), domain = shapefile$Compliance.Status)
+
 
 # leaflet() %>%
 #   addTiles() %>%
@@ -87,27 +89,28 @@ qpal <- colorFactor(palette = c('#004080', '#001F3F'), domain = shapefile$Compli
 
 serve_submissions1 <- vector('list', 61)
 
-serve_submissions1 <- paste0('subs/', list.files('www/subs/'))
-serve_submissions2 <- paste0('hubs/', list.files('www/hubs/')[1:30])
+# serve_submissions1 <- paste0('subs/', list.files('www/subs/'))
+# serve_submissions2 <- paste0('hubs/', list.files('www/hubs/')[1:30])
+# 
+# 
+# serve_submissions1
+# sprintf("%02d", 1:61)
+# 
+# dat <- tibble(
+#   serve_submissions1
+# ) %>% 
+#   mutate(
+#     served1 = ifelse(grepl( sprintf("%02d", 1:61), ), '1', '2')
+#   )
+# 
+# Ziggy <- function(titled, X =serve_submissions1) {
+# 
+# PoPuP <- sprintf(
+#   paste0('<a href="%s" target="_blank">', titled, '</a>'),
+#     X
+# )
+# PoPuP
+# }
+# 
+# Ziggy('Download files')
 
-
-serve_submissions1
-sprintf("%02d", 1:61)
-
-dat <- tibble(
-  serve_submissions1
-) %>% 
-  mutate(
-    served1 = ifelse(grepl( sprintf("%02d", 1:61), ), '1', '2')
-  )
-
-Ziggy <- function(titled, X =serve_submissions1) {
-
-PoPuP <- sprintf(
-  paste0('<a href="%s" target="_blank">', titled, '</a>'),
-    X
-)
-PoPuP
-}
-
-Ziggy('Download files')

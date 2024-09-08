@@ -1,31 +1,36 @@
 
 ui <- page_navbar(
-  title = span(img(src = "DPH_and_PHAB_logo-removebg-preview.png", height = "55px"),  # Adjust height as needed
-    "Public Health Transformation (PHT) Dashboard",
-    style = 'vertical-align: middle;'
+  title = span(img(src = "DPH_and_PHAB_logo-removebg-preview.png", height = "75px"),  # Adjust height as needed
+               "Public Health Transformation (PHT) Dashboard",
+               style = 'vertical-align: middle;'
   ),
   # title = 'Public Health Transformation (PHT) Dashboard',
-  theme = bs_theme(5, 'cerulean', base_font = font_google("Inter")),
+  theme = bs_theme(5, 'materia'),# base_font = font_google("Inter")),
   header = NULL,
   footer = paste('Last updated:', currentDate),
-
+  
   nav_spacer(),
-
+  
   nav_panel(
     title = 'Map', icon = icon('map'),
     tags$head(
       tags$link(rel = "stylesheet", type = "text/css", href = "PHT.css")
     ),
-    h1('Interactive Map'),
-    h4('Kentucky Health Departments'),
+        h2('Kentucky Local Health Departments'),
     navset_card_tab(
       height = 1000,
       full_screen = TRUE,
       title = NULL,
       nav_panel(
         "Main",
-        card_title("Click on the location marker for more information"),
-        leafletOutput('map')
+    h3('Interactive Map Explorer'),
+        card_title("Click the location marker for available information"),
+        # p('Zoom in ( + )'),
+        # p('Zoom out (', HTML('&ndash;'), ')'),
+        div(
+          class = "leaflet-wrapper",  # Wrapping in a div for additional control
+          leafletOutput('map', height = '700px')  # Setting explicit height
+        )
       ),
       nav_panel(
         "Extra",
@@ -38,7 +43,7 @@ ui <- page_navbar(
       )
     )
     
-
+    
   ),
   # nav_panel(
   #   title = 'Charts', icon = icon('chart-column'),
@@ -54,16 +59,20 @@ ui <- page_navbar(
     nav_item(link_shiny),
     nav_item(link_posit)
   ),
-  nav_item(
-    input_dark_mode(id = "dark_mode", mode = "dark") #
-  ),
-  nav_item(
-    tags$a('KDPH', title = 'Kentucky Department for Public Health', href = 'https://www.chfs.ky.gov/agencies/dph/Pages/default.aspx', target = '_blank')
-  ),
+  # nav_item(
+  #   input_dark_mode(id = "dark_mode", mode = "dark") #
+  # ),
+  # nav_item(
+  #   tags$a('KDPH', title = 'Kentucky Department for Public Health', href = 'https://www.chfs.ky.gov/agencies/dph/Pages/default.aspx', target = '_blank')
+  # ),
   sidebar = sidebar(
-    selectInput("var", "Select variable",  choices = mtcars |> names()),
-    hr(),
-    selectInput("var2", "Select variable", choices = mtcars |> names()),
+    h3('Toolbar'),
+    actionButton('resetMap', 'Reset Map', icon=icon('rotate')),
+    radioButtons('labelthemap', 
+                 strong('Map Label Font Size'),
+                 choices = c('Small' = '8px', 'Medium' = '12px', 'Large' = '14px', 'X-Large' = '18px'),
+                 selected = '12px'
+    ),
     hr(),
     tags$blockquote(a('Powered by the Kentucky Department for Public Health',  href = 'https://www.chfs.ky.gov/agencies/dph/Pages/default.aspx', target = '_blank')),
     
