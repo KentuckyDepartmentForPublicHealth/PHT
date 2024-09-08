@@ -3,7 +3,7 @@
 server <- function(input, output, session) {
 
   # Activate thematic
-  thematic::thematic_on(font = "auto")
+  # thematic::thematic_on(font = "auto")
 
   # output$plot2 <- renderPlot({
   #   mtcars |>
@@ -15,7 +15,7 @@ server <- function(input, output, session) {
                updateRadioButtons(session, 'labelthemap', selected = '12px')
                )
   
-  observeEvent( list(input$dark_mode, input$resetMap), {
+  observeEvent( list(input$resetMap), {
   output$map <- renderLeaflet({ 
     
     leaflet(shapefile) %>% 

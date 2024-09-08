@@ -5,7 +5,21 @@ ui <- page_navbar(
                style = 'vertical-align: middle;'
   ),
   # title = 'Public Health Transformation (PHT) Dashboard',
-  theme = bs_theme(5, 'materia'),# base_font = font_google("Inter")),
+  theme = bs_theme(5, bootswatch = 'cyborg',secondary=chfs$cols9[8],
+                   
+                   base_font = font_google("Montserrat", local = TRUE)),# base_font = font_google("Inter")),
+  # theme = bs_theme(
+  #   # Controls the default grayscale palette
+  #   bg = "#e3e4e4", fg = "black",
+  #   # Controls the accent (e.g., hyperlink, button, etc) colors
+  #   primary = "#EA80FC", secondary = "#48DAC6",
+  #   base_font = c("Grandstander", "sans-serif"),
+  #   code_font = c("Courier", "monospace"),
+  #   heading_font = "'Helvetica Neue', Helvetica, sans-serif",
+  #   # Can also add lower-level customization
+  #   "input-border-color" = "#EA80FC"
+  # ),
+  # use_theme(my_theme),
   header = NULL,
   footer = paste('Last updated:', currentDate),
   
@@ -29,7 +43,7 @@ ui <- page_navbar(
         # p('Zoom out (', HTML('&ndash;'), ')'),
         div(
           class = "leaflet-wrapper",  # Wrapping in a div for additional control
-          leafletOutput('map', height = '700px')  # Setting explicit height
+          withSpinner(leafletOutput('map', height = '700px'), type = 3, color.background = 'black')  # Setting explicit height
         )
       ),
       nav_panel(

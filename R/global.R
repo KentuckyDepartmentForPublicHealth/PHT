@@ -10,13 +10,48 @@
 library(shiny)
 library(bslib)
 # library(bsicons)
-library(thematic)
-library(ggplot2)
+# library(thematic)
+# library(ggplot2)
 library(magrittr)
 library(dplyr)
 library(leaflet)
 library(sf)
 library(leaflet.extras)
+library(fresh)
+library(shinycssloaders)
+
+
+# fresh -------------------------------------------------------------------
+
+# my_theme <- create_theme(
+#   bs4dash_vars(
+#     navbar_light_color = "#FFFFFF",   # Text color
+#     navbar_light_active_color = "#FFD700", # Active link color (gold)
+#     navbar_light_hover_color = "#FFD700"  # Hover link color (gold)
+#   ),
+#   bs4dash_yiq(
+#     contrasted_threshold = 10,
+#     text_dark = "#FFFFFF",  # Text color for dark background
+#     text_light = "#004080"  # Text color for light background
+#   ),
+#   bs4dash_layout(
+#     main_bg = "#004080"  # Navbar background color
+#   )
+# )
+
+
+# colors ------------------------------------------------------------------
+
+chfs <- list(
+  cols2 = c('#95D3F5', '#0C3151'),
+  cols3 = c('#62BCF0', '#01203D', '#84BC49'),
+  cols4 = c('#5CB2E5', '#0C3151', '#305E4C', '#76AB48'),
+  cols5 = c('#95D3F5', '#5CB2E5', '#0C3151', '#517F44', '#9FCA70'),
+  cols6 = c('#95D3F5', '#5CB2E5', '#0C3151', '#305E4C', '#517F44', '#9FCA70'),
+  cols7 = c('#95D3F5', '#5CB2E5', '#3A7CA6', '#0C3151', '#305E4C', '#517F44', '#9FCA70'),
+  cols8 = c('#95D3F5', '#5CB2E5', '#3A7CA6', '#0C3151', '#00060C', '#305E4C', '#517F44', '#9FCA70'),
+  cols9 = c('#5CB2E5', '#0C3151', '#305E4C', '#76AB48','#00060C', '#305E4C', '#517F44', '#76AB48', '#9FCA70')
+)
 
 # deploy ------------------------------------------------------------------
 
