@@ -22,20 +22,21 @@ server <- function(input, output, session) {
       addPolygons(
         fillColor = ~qpal(Compliance.Status),
         fillOpacity = 1,
-        color = 'black',
+        color = 'white',
         weight = 2,
         label = sprintf("%s",
                         paste('<span style="font-size: 1.5em">',
                               # "<b>Geography: </b>", shapefile$NAME10, '<br>',
-                             shapefile$NAME10, '<br>',
+                            '<b>LHD: </b>', shapefile$NAME10, '<br>',
+                             '<b>Counties: </b>',shapefile$Listing, '<br>',
                               # "<b>Variable: </b>", a('link', href = 'kde.org', target='_blank'), '<br>',
-                              "<b>Compliant? </b>", shapefile$Compliance.Status, '</span>'
+                              "<b>Submitted? </b>", shapefile$Compliance.Status, '</span>'
                         )
         ) %>%
           lapply(htmltools::HTML)
       ) %>% 
       addControl(paste('Title 902 | Chapter 008 | Regulation 160',br(), br(), 'Local Needs Assessment'), position = 'topright') %>%
-      addLegend(title = HTML(paste0("<span style='color: #0C3151; font-size: 1.2em;'>", 'Compliant?',"</span>")),
+      addLegend(title = HTML(paste0("<span style='color: #0C3151; font-size: 1.2em;'>", 'Submitted?',"</span>")),
                 position = 'topright',
                 values = ~Compliance.Status, # change here
                 # pal =  qpal(), # app WORKS
@@ -43,14 +44,36 @@ server <- function(input, output, session) {
                 pal = qpal, # interactive
                 opacity = 1
       ) %>%
-      addMarkers(.,
-                 lng = ~ as.numeric(unlist(INTPTLON10)), 
-                 lat = ~ as.numeric(unlist(INTPTLAT10)),
-                 popup = sprintf(
-                     paste0('<a href="%s" target="_blank">CHA/CHIP</a>'),
-                     serve_submissions1
-                   )
-        ) %>%
+      # {if (!input$showmarkers) {.} else { addMarkers(.,
+      #            lng = ~ as.numeric(unlist(INTPTLON10)), 
+      #            lat = ~ as.numeric(unlist(INTPTLAT10)),
+      #            popup = sprintf(
+      #                paste0('<a href="%s" target="_blank">CHA/CHIP</a>'),
+      #                serve_submissions1
+      #              )
+      #   )}} %>%
+      {if (!input$showmarkers) {.} else {
+        addMarkers(.,
+                   lng = ~ as.numeric(unlist(INTPTLON10)),
+                   lat = ~ as.numeric(unlist(INTPTLAT10)),
+                   popup = ~{
+                     lapply(1:nrow(shapefile), function(i) {
+                       marker_files <- nested_data_flat %>%
+                         filter(NAME == shapefile$NAMELSAD10[i])
+                       
+                       if (nrow(marker_files) == 0 || all(is.na(marker_files$files))) {
+                         "No files available"
+                       } else {
+                         paste0("<ul>", 
+                                paste0("<li><a href='", marker_files$files, 
+                                       "' target='_blank'>", 
+                                       basename(marker_files$files), 
+                                       "</a></li>", collapse = ""), 
+                                "</ul>")
+                       }
+                     })
+                   })
+      }} %>%
       # addMarkers(lng = centroid_coords[, 1], lat = centroid_coords[, 2]) %>% 
       addLabelOnlyMarkers(
         lng = ~ as.numeric(unlist(INTPTLON10)), lat = ~ as.numeric(unlist(INTPTLAT10)),
@@ -71,20 +94,29 @@ server <- function(input, output, session) {
   
   ## Downloads panel
   # Reactive expression to return the files based on the selected directory
-  selected_files <- reactive({
-    nested_data %>%
-      filter(dir == input$bydirectory) %>%
-      unnest(files)  # Unnest the files for the selected directory
-  })
-  
+
   # Render the table with downloadable links
   observeEvent(input$searchdownloads, {
-  output$file_table <- renderTable({
-    selected_files() %>%
-      mutate(download_link = paste0("<a href='", files, "' download>", basename(files), "</a>")) %>%
-      select(download_link) %>%
-      rename("Downloadable Files" = download_link)  # Display as clickable links
-  }, sanitize.text.function = function(x) x)  # Disable sanitizing to allow HTML rendering
-})
+    
+    selected_files <- reactive({
+      nested_data2 %>%
+        filter(NAME %in% isolate(input$bydirectory)) %>%
+        unnest(files)  # Unnest the files for the selected directory
+    })
+    
+    output$file_table <- renderTable({
+      # Check if selected_files() is empty
+      if (nrow(selected_files()) == 0) {
+        # Return a data frame with the "No files available" message
+        tibble("Downloadable Files" = "No files available")
+      } else {
+        # If there are files, generate the download links
+        selected_files() %>%
+          mutate(download_link = paste0("<a href='", files, "' download>", basename(files), "</a>")) %>%
+          select(download_link) %>%
+          rename("Downloadable Files" = download_link)  # Display as clickable links
+      }
+    }, sanitize.text.function = function(x) x)  # Disable sanitizing to allow HTML rendering
+  })
 
 } # end Server

@@ -12,6 +12,7 @@ library(bslib)
 # library(bsicons)
 # library(thematic)
 # library(ggplot2)
+library(DT)
 library(magrittr)
 library(dplyr)
 library(tidyr)
@@ -110,9 +111,12 @@ shapefile <- st_transform(shapefile, crs = 4326)
 centroids <- st_centroid(shapefile)
 centroid_coords <- st_coordinates(centroids)
 shapefile$Compliance.Status <- sample(c('Yes','No','Yes','Yes','Yes','Yes'), 61, replace = T)
+load(file = 'dat/select2cols.RData') # add Listing
+shapefile <- merge(shapefile, y, by = 'FID')
+
 # pal <- colorNumeric(palette = "viridis", domain = shapefile$FID)
 # qpal <- colorFactor(palette = c('#004080', '#001F3F'), domain = shapefile$Compliance.Status)
-qpal <- colorFactor(palette = c('gray80', 'gray95'), domain = shapefile$Compliance.Status)
+qpal <- colorFactor(palette = c('gray80', '#5CB2E5'), domain = shapefile$Compliance.Status)
 
 
 # leaflet() %>%
@@ -153,8 +157,14 @@ serve_submissions1 <- paste0('subs/', list.files('www/subs/'))
 # Function to list files from multiple directories and remove "www" from paths
 list_files_from_directories <- function(dirs) {
   tibble(dir = dirs) %>%
-    mutate(files = map(dir, list.files, full.names = TRUE)) %>%
-    mutate(files = map(files, ~ gsub("^www/", "", .x)))  # Remove "www" from paths
+    mutate(files = map(dir, function(d) {
+      files <- list.files(d, full.names = TRUE)
+      # Remove "www" from the directory path if it exists and avoid extra slashes
+      files <- gsub("^www/", "", files)  # Remove leading "www/" only
+      # Ensure no double slashes
+      files <- gsub("/+", "/", files)  # Collapse multiple slashes to a single slash
+      return(files)
+    }))
 }
 
 # Example directories on your host machine
@@ -162,4 +172,37 @@ dirs <- c('www/subs/', 'www/hubs/')
 
 # Create a nested data frame of directories and their file contents
 nested_data <- list_files_from_directories(dirs)
+
+# y <- readxl::read_xlsx('dat/select2cols.xlsx') %>% 
+  # dplyr::select(FID, Listing)
+
+# save(y, file = 'dat/select2cols.RData')
+
+
+####
+# Function to read directories and capture files along with their folder names
+read_files_from_directories <- function(base_dir) {
+  # List all directories (folders)
+  dirs <- list.dirs(base_dir, recursive = FALSE, full.names = TRUE)
+  
+  # Create a tibble with the directory name as NAME and the files inside as 'files'
+  tibble(NAME = basename(dirs)) %>%
+    mutate(files = map(dirs, function(d) {
+      files <- list.files(d, full.names = TRUE)
+      
+      # Remove leading "www/" if present
+      files <- gsub("^www/", "", files)
+      
+      # Collapse multiple slashes to a single slash
+      files <- gsub("/+", "/", files)
+      
+      return(files)
+    }))
+}
+
+# Example directories on your host machine
+nested_data2 <- read_files_from_directories(c('www/Listing/'))
+
+nested_data_flat <- nested_data2 %>%
+  unnest(cols = files, keep_empty = T)
 

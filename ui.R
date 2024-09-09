@@ -5,6 +5,10 @@ ui <- page_navbar(
                style = 'vertical-align: middle;'
   ),
   # title = 'Public Health Transformation (PHT) Dashboard',
+
+# theme -------------------------------------------------------------------
+
+  
   theme = bs_theme(5, bootswatch = 'cyborg',secondary=chfs$cols9[9],
                    
                    base_font = font_google("Montserrat", local = TRUE)),# base_font = font_google("Inter")),
@@ -20,6 +24,11 @@ ui <- page_navbar(
   #   "input-border-color" = "#EA80FC"
   # ),
   # use_theme(my_theme),
+
+
+# header/footer -----------------------------------------------------------
+
+
   header = NULL,
   footer = paste('Last updated:', currentDate),
   
@@ -31,10 +40,19 @@ ui <- page_navbar(
       tags$link(rel = "stylesheet", type = "text/css", href = "PHT.css")
     ),
         h2('Kentucky Local Health Departments'),
+    
+
+# navset_card_tab ---------------------------------------------------------
+
+    
     navset_card_tab(
       height = 1000,
       full_screen = TRUE,
       title = NULL,
+
+# map ---------------------------------------------------------------------
+
+      
       nav_panel(
         title = tagList(icon("map"), "Map"),
     h3('Interactive Map Explorer'),
@@ -46,20 +64,22 @@ ui <- page_navbar(
           withSpinner(leafletOutput('map', height = '700px'), type = 3, color.background = 'black')  # Setting explicit height
         )
       ),
+
+
+# downloads ---------------------------------------------------------------
+
+
       nav_panel(
         title = tagList(icon("cloud-arrow-down"), "Downloads"),
-        h3('Download LHD Files'),
-        card_title("Search by directory"),
+        h3('Search available data'),
+        card_title("Note: Same data as found within the map location markers"),
         sidebarLayout(
           sidebarPanel(
             # selectInput("directory", "Choose a Directory:", choices = unique(nested_data$dir))
-            selectInput("bydirectory", "Choose a Category:", choices = 
-                          c('Local Needs Assessment' = 'www/subs/', 'Another Directory' = 'www/hubs/')),
-            selectInput("bylhd", "Choose a LHD:", choices = shapefile$NAMELSAD10),
+            selectInput("bydirectory", "Choose", choices = shapefile$NAMELSAD10 %>% sort(), selected = 'Allen County'),
             actionButton('searchdownloads', 'Search')
           ),
           mainPanel(
-            h4("Files in Directory"),
             tableOutput("file_table")
           )
         )
@@ -92,14 +112,22 @@ ui <- page_navbar(
   # nav_item(
   #   tags$a('KDPH', title = 'Kentucky Department for Public Health', href = 'https://www.chfs.ky.gov/agencies/dph/Pages/default.aspx', target = '_blank')
   # ),
+  
+
+# sidebar -----------------------------------------------------------------
+
+  
   sidebar = sidebar(
     h4('Toolbar'),
     actionButton('resetMap', 'Reset Map', icon=icon('rotate')),
+    hr(),
     radioButtons('labelthemap', 
                  strong('Map Label Font Size'),
                  choices = c('Small' = '8px', 'Medium' = '12px', 'Large' = '14px', 'X-Large' = '18px'),
                  selected = '12px'
     ),
+    hr(),
+    input_switch('showmarkers', 'Show location markers?', value = T),
     hr(),
     tags$blockquote(a('Powered by the Kentucky Department for Public Health',  href = 'https://www.chfs.ky.gov/agencies/dph/Pages/default.aspx', target = '_blank')),
     
