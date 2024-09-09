@@ -14,6 +14,8 @@ library(bslib)
 # library(ggplot2)
 library(magrittr)
 library(dplyr)
+library(tidyr)
+library(purrr)
 library(leaflet)
 library(sf)
 library(leaflet.extras)
@@ -122,20 +124,18 @@ qpal <- colorFactor(palette = c('gray80', 'gray95'), domain = shapefile$Complian
 #               fillOpacity = 0.5,
 #               popup = ~paste("Population: ", FID))
 
-serve_submissions1 <- vector('list', 61)
-
-# serve_submissions1 <- paste0('subs/', list.files('www/subs/'))
-# serve_submissions2 <- paste0('hubs/', list.files('www/hubs/')[1:30])
+# serve_submissions1 <- vector('list', 61)
+# 
+serve_submissions1 <- paste0('subs/', list.files('www/subs/'))
+# # serve_submissions2 <- paste0('hubs/', list.files('www/hubs/')[1:30])
 # 
 # 
 # serve_submissions1
-# sprintf("%02d", 1:61)
+# # sprintf("%02d", 1:61)
 # 
-# dat <- tibble(
-#   serve_submissions1
-# ) %>% 
+# dat <- shapefile %>%
 #   mutate(
-#     served1 = ifelse(grepl( sprintf("%02d", 1:61), ), '1', '2')
+#     res1 = sprintf("%02d", FID)
 #   )
 # 
 # Ziggy <- function(titled, X =serve_submissions1) {
@@ -148,4 +148,18 @@ serve_submissions1 <- vector('list', 61)
 # }
 # 
 # Ziggy('Download files')
+
+##
+# Function to list files from multiple directories and remove "www" from paths
+list_files_from_directories <- function(dirs) {
+  tibble(dir = dirs) %>%
+    mutate(files = map(dir, list.files, full.names = TRUE)) %>%
+    mutate(files = map(files, ~ gsub("^www/", "", .x)))  # Remove "www" from paths
+}
+
+# Example directories on your host machine
+dirs <- c('www/subs/', 'www/hubs/')
+
+# Create a nested data frame of directories and their file contents
+nested_data <- list_files_from_directories(dirs)
 

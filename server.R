@@ -46,7 +46,10 @@ server <- function(input, output, session) {
       addMarkers(.,
                  lng = ~ as.numeric(unlist(INTPTLON10)), 
                  lat = ~ as.numeric(unlist(INTPTLAT10)),
-                 popup = NULL
+                 popup = sprintf(
+                     paste0('<a href="%s" target="_blank">CHA/CHIP</a>'),
+                     serve_submissions1
+                   )
         ) %>%
       # addMarkers(lng = centroid_coords[, 1], lat = centroid_coords[, 2]) %>% 
       addLabelOnlyMarkers(
@@ -65,4 +68,23 @@ server <- function(input, output, session) {
      leaflet.extras::setMapWidgetStyle(., list(background= 'white'))
     }) # end renderLeaflet
   }) # end observeEvent
-}
+  
+  ## Downloads panel
+  # Reactive expression to return the files based on the selected directory
+  selected_files <- reactive({
+    nested_data %>%
+      filter(dir == input$bydirectory) %>%
+      unnest(files)  # Unnest the files for the selected directory
+  })
+  
+  # Render the table with downloadable links
+  observeEvent(input$searchdownloads, {
+  output$file_table <- renderTable({
+    selected_files() %>%
+      mutate(download_link = paste0("<a href='", files, "' download>", basename(files), "</a>")) %>%
+      select(download_link) %>%
+      rename("Downloadable Files" = download_link)  # Display as clickable links
+  }, sanitize.text.function = function(x) x)  # Disable sanitizing to allow HTML rendering
+})
+
+} # end Server

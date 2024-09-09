@@ -5,7 +5,7 @@ ui <- page_navbar(
                style = 'vertical-align: middle;'
   ),
   # title = 'Public Health Transformation (PHT) Dashboard',
-  theme = bs_theme(5, bootswatch = 'cyborg',secondary=chfs$cols9[8],
+  theme = bs_theme(5, bootswatch = 'cyborg',secondary=chfs$cols9[9],
                    
                    base_font = font_google("Montserrat", local = TRUE)),# base_font = font_google("Inter")),
   # theme = bs_theme(
@@ -26,7 +26,7 @@ ui <- page_navbar(
   nav_spacer(),
   
   nav_panel(
-    title = 'Map', icon = icon('map'),
+    title = 'Home', icon = icon('house'),
     tags$head(
       tags$link(rel = "stylesheet", type = "text/css", href = "PHT.css")
     ),
@@ -36,7 +36,7 @@ ui <- page_navbar(
       full_screen = TRUE,
       title = NULL,
       nav_panel(
-        "Main",
+        title = tagList(icon("map"), "Map"),
     h3('Interactive Map Explorer'),
         card_title("Click the location marker for available information"),
         # p('Zoom in ( + )'),
@@ -47,9 +47,22 @@ ui <- page_navbar(
         )
       ),
       nav_panel(
-        "Extra",
-        card_title("A leaflet plot")
-        #leaflet_widget
+        title = tagList(icon("cloud-arrow-down"), "Downloads"),
+        h3('Download LHD Files'),
+        card_title("Search by directory"),
+        sidebarLayout(
+          sidebarPanel(
+            # selectInput("directory", "Choose a Directory:", choices = unique(nested_data$dir))
+            selectInput("bydirectory", "Choose a Category:", choices = 
+                          c('Local Needs Assessment' = 'www/subs/', 'Another Directory' = 'www/hubs/')),
+            selectInput("bylhd", "Choose a LHD:", choices = shapefile$NAMELSAD10),
+            actionButton('searchdownloads', 'Search')
+          ),
+          mainPanel(
+            h4("Files in Directory"),
+            tableOutput("file_table")
+          )
+        )
       ),
       nav_panel(
         shiny::icon("circle-info"),
@@ -80,7 +93,7 @@ ui <- page_navbar(
   #   tags$a('KDPH', title = 'Kentucky Department for Public Health', href = 'https://www.chfs.ky.gov/agencies/dph/Pages/default.aspx', target = '_blank')
   # ),
   sidebar = sidebar(
-    h3('Toolbar'),
+    h4('Toolbar'),
     actionButton('resetMap', 'Reset Map', icon=icon('rotate')),
     radioButtons('labelthemap', 
                  strong('Map Label Font Size'),
