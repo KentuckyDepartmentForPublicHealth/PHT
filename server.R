@@ -27,7 +27,6 @@ server <- function(input, output, session) {
     })
   })
   
-  observeEvent( list(input$resetMap), {
   output$map <- renderLeaflet({ 
     
     leaflet(shapefile) %>% 
@@ -102,7 +101,6 @@ server <- function(input, output, session) {
       setView(., lng = -85.711244, lat = 37.735969, zoom = 8) %>% 
      leaflet.extras::setMapWidgetStyle(., list(background= 'white'))
     }) # end renderLeaflet
-  }) # end observeEvent
   
   ## Downloads panel
   # Reactive expression to return the files based on the selected directory
