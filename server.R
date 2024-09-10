@@ -15,6 +15,17 @@ server <- function(input, output, session) {
                updateRadioButtons(session, 'labelthemap', selected = '12px')
                )
   
+  
+  observeEvent(input$resetdownloads, {
+    # Reset the selected input (e.g., set 'bydirectory' back to 'Allen County')
+    updateSelectInput(session, 'bydirectory', selected = 'Allen County')
+    
+    # Clear the table by rendering a message or setting it to NULL
+    output$file_table <- renderTable({
+      data.frame(NULL)
+    })
+  })
+  
   observeEvent( list(input$resetMap), {
   output$map <- renderLeaflet({ 
     
@@ -108,7 +119,7 @@ server <- function(input, output, session) {
       # Check if selected_files() is empty
       if (nrow(selected_files()) == 0) {
         # Return a data frame with the "No files available" message
-        tibble("Downloadable Files" = "No files available")
+        tibble("Downloadable Files" = paste("No files available for", isolate(input$bydirectory)))
       } else {
         # If there are files, generate the download links
         selected_files() %>%

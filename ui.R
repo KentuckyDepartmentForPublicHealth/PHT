@@ -9,7 +9,7 @@ ui <- page_navbar(
 # theme -------------------------------------------------------------------
 
   
-  theme = bs_theme(5, bootswatch = 'cyborg',secondary=chfs$cols9[9],
+  theme = bs_theme(5, bootswatch = 'cyborg',secondary=chfs$cols9[9],primary=chfs$cols9[1],
                    
                    base_font = font_google("Montserrat", local = TRUE)),# base_font = font_google("Inter")),
   # theme = bs_theme(
@@ -56,7 +56,7 @@ ui <- page_navbar(
       nav_panel(
         title = tagList(icon("map"), "Map"),
     h3('Interactive Map Explorer'),
-        card_title("Click the location marker for available information"),
+        card_title("Click location markers for downloadable information"),
         # p('Zoom in ( + )'),
         # p('Zoom out (', HTML('&ndash;'), ')'),
         div(
@@ -70,14 +70,15 @@ ui <- page_navbar(
 
 
       nav_panel(
-        title = tagList(icon("cloud-arrow-down"), "Downloads"),
-        h3('Search available data'),
-        card_title("Note: Same data as found within the map location markers"),
+        title = tagList(icon("cloud-arrow-down"), "Direct Downloads"),
+        h3('Search available files'),
+        card_title("Same data here as found within the map location markers"),
         sidebarLayout(
           sidebarPanel(
             # selectInput("directory", "Choose a Directory:", choices = unique(nested_data$dir))
-            selectInput("bydirectory", "Choose", choices = shapefile$NAMELSAD10 %>% sort(), selected = 'Allen County'),
-            actionButton('searchdownloads', 'Search')
+            selectInput("bydirectory", "Choose LHD", choices = shapefile$NAMELSAD10 %>% sort(), selected = 'Allen County'),
+            actionButton('searchdownloads', 'Search'),
+            actionButton('resetdownloads', 'Reset')
           ),
           mainPanel(
             tableOutput("file_table")
