@@ -116,7 +116,7 @@ shapefile <- merge(shapefile, y, by = 'FID')
 
 # pal <- colorNumeric(palette = "viridis", domain = shapefile$FID)
 # qpal <- colorFactor(palette = c('#004080', '#001F3F'), domain = shapefile$Compliance.Status)
-qpal <- colorFactor(palette = c('gray80', '#5CB2E5'), domain = shapefile$Compliance.Status)
+qpal <- colorFactor(palette = c('gray', chfs$cols9[9]), domain = shapefile$Compliance.Status)
 
 
 # leaflet() %>%

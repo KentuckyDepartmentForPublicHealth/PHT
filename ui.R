@@ -9,7 +9,7 @@ ui <- page_navbar(
 # theme -------------------------------------------------------------------
 
   
-  theme = bs_theme(5, bootswatch = 'cyborg',secondary=chfs$cols9[9],primary=chfs$cols9[1],
+  theme = bs_theme(5, bootswatch = 'cyborg',secondary=chfs$cols9[1],primary=chfs$cols9[1],
                    
                    base_font = font_google("Montserrat", local = TRUE)),# base_font = font_google("Inter")),
   # theme = bs_theme(
@@ -124,7 +124,7 @@ ui <- page_navbar(
     hr(),
     radioButtons('labelthemap', 
                  strong('Map Label Font Size'),
-                 choices = c('Small' = '8px', 'Medium' = '12px', 'Large' = '14px', 'X-Large' = '18px'),
+                 choices = c('No Labels' = 'nolabels', 'Small' = '8px', 'Medium' = '12px', 'Large' = '14px', 'X-Large' = '18px'),
                  selected = '12px'
     ),
     hr(),

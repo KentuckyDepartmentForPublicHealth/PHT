@@ -22,3 +22,12 @@
   height: 1400px !important;
   width: 100% !important;
 }*/
+
+blockquote {
+   # margin: 0 0 1rem;
+    #padding: .625rem 1.25rem;
+    border-left: .5rem solid #e9ecef;
+    border-right: .5rem solid #e9ecef;
+    border-radius: 15px;
+    text-align: center;
+}

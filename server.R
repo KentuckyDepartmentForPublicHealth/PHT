@@ -11,9 +11,10 @@ server <- function(input, output, session) {
   # })
   # 
   
-  observeEvent(input$resetMap,
+  observeEvent(input$resetMap, {
                updateRadioButtons(session, 'labelthemap', selected = '12px')
-               )
+               update_switch('showmarkers', value = T)
+               })
   
   
   observeEvent(input$resetdownloads, {
@@ -86,7 +87,7 @@ server <- function(input, output, session) {
                    })
       }} %>%
       # addMarkers(lng = centroid_coords[, 1], lat = centroid_coords[, 2]) %>% 
-      addLabelOnlyMarkers(
+      {if (input$labelthemap %in% 'nolabels') {.} else {addLabelOnlyMarkers(.,
         lng = ~ as.numeric(unlist(INTPTLON10)), lat = ~ as.numeric(unlist(INTPTLAT10)),
         label = ~ NAMELSAD10, 
         icon = NULL,
@@ -97,7 +98,7 @@ server <- function(input, output, session) {
           textOnly = T,
           style = list("color" = 'black') #e95420 #772953
         )
-      ) %>% 
+      )}} %>% 
       setView(., lng = -85.711244, lat = 37.735969, zoom = 8) %>% 
      leaflet.extras::setMapWidgetStyle(., list(background= 'white'))
     }) # end renderLeaflet
