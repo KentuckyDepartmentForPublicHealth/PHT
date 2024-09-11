@@ -15,6 +15,9 @@ server <- function(input, output, session) {
                updateRadioButtons(session, 'labelthemap', selected = '12px')
                update_switch('showmarkers', value = T)
                update_switch('showpopup', value = T)
+               output$map <- renderLeaflet({ 
+                 mapPrecursor()
+               }) 
                })
   
   
@@ -31,8 +34,7 @@ server <- function(input, output, session) {
 
 # leaflet -----------------------------------------------------------------
 
-  
-  output$map <- renderLeaflet({ 
+  mapPrecursor <- reactive({
     
     leaflet(shapefile) %>% 
       addPolygons(
@@ -41,15 +43,15 @@ server <- function(input, output, session) {
         color = 'white',
         weight = 2,
         label = if (!input$showpopup) {NULL} else {sprintf("%s",
-                        paste('<span style="font-size: 1.5em">',
-                              # "<b>Geography: </b>", shapefile$NAME10, '<br>',
-                            '<b>LHD: </b>', shapefile$NAME10, '<br>',
-                             '<b>Counties: </b>',shapefile$Listing, '<br>',
-                              # "<b>Variable: </b>", a('link', href = 'kde.org', target='_blank'), '<br>',
-                              "<b>Submitted? </b>", shapefile$Compliance.Status, '</span>'
-                        )
+                                                           paste('<span style="font-size: 1.5em">',
+                                                                 # "<b>Geography: </b>", shapefile$NAME10, '<br>',
+                                                                 '<b>LHD: </b>', shapefile$NAME10, '<br>',
+                                                                 '<b>Counties: </b>',shapefile$Listing, '<br>',
+                                                                 # "<b>Variable: </b>", a('link', href = 'kde.org', target='_blank'), '<br>',
+                                                                 "<b>Submitted? </b>", shapefile$Compliance.Status, '</span>'
+                                                           )
         ) %>%
-          lapply(htmltools::HTML)}
+            lapply(htmltools::HTML)}
       ) %>% 
       addControl(paste('Title 902 | Chapter 008 | Regulation 160',br(), br(), 'Local Needs Assessment'), position = 'topright') %>%
       addLegend(title = HTML(paste0("<span style='color: #0C3151; font-size: 1.2em;'>", 'Submitted?',"</span>")),
@@ -92,19 +94,23 @@ server <- function(input, output, session) {
       }} %>%
       # addMarkers(lng = centroid_coords[, 1], lat = centroid_coords[, 2]) %>% 
       {if (input$labelthemap %in% 'nolabels') {.} else {addLabelOnlyMarkers(.,
-        lng = ~ as.numeric(unlist(INTPTLON10)), lat = ~ as.numeric(unlist(INTPTLAT10)),
-        label = ~ NAMELSAD10, 
-        icon = NULL,
-        labelOptions = labelOptions(
-          noHide = TRUE,
-          sticky=F,
-          textsize = input$labelthemap,
-          textOnly = T,
-          style = list("color" = 'black') #e95420 #772953
-        )
+                                                                            lng = ~ as.numeric(unlist(INTPTLON10)), lat = ~ as.numeric(unlist(INTPTLAT10)),
+                                                                            label = ~ NAMELSAD10, 
+                                                                            icon = NULL,
+                                                                            labelOptions = labelOptions(
+                                                                              noHide = TRUE,
+                                                                              sticky=F,
+                                                                              textsize = input$labelthemap,
+                                                                              textOnly = T,
+                                                                              style = list("color" = 'black') #e95420 #772953
+                                                                            )
       )}} %>% 
       setView(., lng = -85.711244, lat = 37.735969, zoom = 8) %>% 
-     leaflet.extras::setMapWidgetStyle(., list(background= 'white'))
+      leaflet.extras::setMapWidgetStyle(., list(background= 'white'))
+  })
+  
+  output$map <- renderLeaflet({ 
+    if (!input$resetMap) mapPrecursor()
     }) # end renderLeaflet
   
   ## Downloads panel
