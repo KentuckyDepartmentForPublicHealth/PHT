@@ -129,6 +129,7 @@ ui <- page_navbar(
     ),
     hr(),
     input_switch('showmarkers', 'Show location markers?', value = T),
+    input_switch('showpopup', 'Show hover info?', value = T),
     hr(),
     tags$blockquote(a('Powered by the Kentucky Department for Public Health',  href = 'https://www.chfs.ky.gov/agencies/dph/Pages/default.aspx', target = '_blank')),
     

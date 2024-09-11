@@ -14,6 +14,7 @@ server <- function(input, output, session) {
   observeEvent(input$resetMap, {
                updateRadioButtons(session, 'labelthemap', selected = '12px')
                update_switch('showmarkers', value = T)
+               update_switch('showpopup', value = T)
                })
   
   
@@ -27,6 +28,10 @@ server <- function(input, output, session) {
     })
   })
   
+
+# leaflet -----------------------------------------------------------------
+
+  
   output$map <- renderLeaflet({ 
     
     leaflet(shapefile) %>% 
@@ -35,7 +40,7 @@ server <- function(input, output, session) {
         fillOpacity = 1,
         color = 'white',
         weight = 2,
-        label = sprintf("%s",
+        label = if (!input$showpopup) {NULL} else {sprintf("%s",
                         paste('<span style="font-size: 1.5em">',
                               # "<b>Geography: </b>", shapefile$NAME10, '<br>',
                             '<b>LHD: </b>', shapefile$NAME10, '<br>',
@@ -44,7 +49,7 @@ server <- function(input, output, session) {
                               "<b>Submitted? </b>", shapefile$Compliance.Status, '</span>'
                         )
         ) %>%
-          lapply(htmltools::HTML)
+          lapply(htmltools::HTML)}
       ) %>% 
       addControl(paste('Title 902 | Chapter 008 | Regulation 160',br(), br(), 'Local Needs Assessment'), position = 'topright') %>%
       addLegend(title = HTML(paste0("<span style='color: #0C3151; font-size: 1.2em;'>", 'Submitted?',"</span>")),
