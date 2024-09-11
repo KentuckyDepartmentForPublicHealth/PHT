@@ -24,5 +24,7 @@ locations=(
 # Loop through the array and create directories for each location
 for location in "${locations[@]}"; do
 mkdir -p "$location"
+touch "$location/.gitkeep"
 echo "Directory created: $location"
+echo ".gitkeep created inside $location"
 done

@@ -42,7 +42,7 @@ server <- function(input, output, session) {
     
     leaflet(shapefile) %>% 
       addPolygons(
-        fillColor = ~qpal(Compliance.Status),
+        fillColor = ~qpal(Status),
         fillOpacity = 1,
         color = 'white',
         weight = 2,
@@ -52,15 +52,15 @@ server <- function(input, output, session) {
                                                                  '<b>LHD: </b>', shapefile$NAME10, '<br>',
                                                                  '<b>Counties: </b>',shapefile$Listing, '<br>',
                                                                  # "<b>Variable: </b>", a('link', href = 'kde.org', target='_blank'), '<br>',
-                                                                 "<b>Submitted? </b>", shapefile$Compliance.Status, '</span>'
+                                                                 "<b>Completed? </b>", shapefile$Status, '</span>'
                                                            )
         ) %>%
             lapply(htmltools::HTML)}
       ) %>% 
       addControl(paste('Title 902 | Chapter 008 | Regulation 160',br(), br(), 'Local Needs Assessment'), position = 'topright') %>%
-      addLegend(title = HTML(paste0("<span style='color: #0C3151; font-size: 1.2em;'>", 'Submitted?',"</span>")),
+      addLegend(title = HTML(paste0("<span style='color: #0C3151; font-size: 1.2em;'>", 'Completed?',"</span>")),
                 position = 'topright',
-                values = ~Compliance.Status, # change here
+                values = ~Status, # change here
                 # pal =  qpal(), # app WORKS
                 # pal =  isolate(qpal()), # app WORKS
                 pal = qpal, # interactive
@@ -120,9 +120,7 @@ server <- function(input, output, session) {
   }, once = T)
   
   
-  ## Downloads panel
-  # Reactive expression to return the files based on the selected directory
-
+## Downloads panel
   # Render the table with downloadable links
   observeEvent(input$searchdownloads, {
     
@@ -145,6 +143,7 @@ server <- function(input, output, session) {
           rename("Downloadable Files" = download_link)  # Display as clickable links
       }
     }, sanitize.text.function = function(x) x)  # Disable sanitizing to allow HTML rendering
-  })
+  })  
+  
 
 } # end Server

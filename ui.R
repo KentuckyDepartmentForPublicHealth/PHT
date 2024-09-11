@@ -62,7 +62,7 @@ ui <- page_navbar(
         # p('Zoom out (', HTML('&ndash;'), ')'),
         div(
           class = "leaflet-wrapper",  # Wrapping in a div for additional control
-          withSpinner(leafletOutput('map', height = '700px'), type = 3, color.background = 'black')  # Setting explicit height
+          withSpinner(leafletOutput('map', height = '800px'), type = 3, color.background = 'black')  # Setting explicit height
         )
       ),
 
@@ -71,9 +71,9 @@ ui <- page_navbar(
 
 
       nav_panel(
-        title = tagList(icon("cloud-arrow-down"), "Direct Downloads"),
-        h3('Search available files'),
-        card_title("Same data here as found within the map location markers"),
+        title = tagList(icon("cloud-arrow-down"), "Downloads"),
+        h3('Directly download available files'),
+        card_title("Contains same data as the map location markers"),
         sidebarLayout(
           sidebarPanel(
             # selectInput("directory", "Choose a Directory:", choices = unique(nested_data$dir))
@@ -105,8 +105,8 @@ ui <- page_navbar(
   nav_menu(
     title = "Links", icon = icon('link'),
     align = "right",
-    nav_item(link_shiny),
-    nav_item(link_posit)
+    nav_item(link_khda),
+    nav_item(link_naccho)
   ),
   # nav_item(
   #   input_dark_mode(id = "dark_mode", mode = "dark") #
