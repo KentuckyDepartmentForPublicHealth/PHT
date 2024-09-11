@@ -10,15 +10,19 @@ server <- function(input, output, session) {
   #     ggplot(aes(!!sym(input$var), !!sym(input$var2), color = factor(cyl))) 
   # })
   # 
-  
+
+  # Use leafletProxy() to update the map on reset instead of re-rendering it
   observeEvent(input$resetMap, {
-               updateRadioButtons(session, 'labelthemap', selected = '12px')
-               update_switch('showmarkers', value = T)
-               update_switch('showpopup', value = T)
-               output$map <- renderLeaflet({ 
-                 mapPrecursor()
-               }) 
-               })
+    updateRadioButtons(session, 'labelthemap', selected = '12px')
+    update_switch('showmarkers', value = TRUE)
+    update_switch('showpopup', value = TRUE)
+    
+    leafletProxy("map") %>% 
+      realignViewOfKentucky()
+  #   output$map <- renderLeaflet({
+  #     mapPrecursor()  
+  # })
+  })
   
   
   observeEvent(input$resetdownloads, {
@@ -102,16 +106,19 @@ server <- function(input, output, session) {
                                                                               sticky=F,
                                                                               textsize = input$labelthemap,
                                                                               textOnly = T,
-                                                                              style = list("color" = 'black') #e95420 #772953
+                                                                              style = list("color" = 'white') #e95420 #772953
                                                                             )
       )}} %>% 
-      setView(., lng = -85.711244, lat = 37.735969, zoom = 8) %>% 
-      leaflet.extras::setMapWidgetStyle(., list(background= 'white'))
+      realignViewOfKentucky() %>% 
+      leaflet.extras::setMapWidgetStyle(., list(background= 'black'))
   })
   
-  output$map <- renderLeaflet({ 
-    if (!input$resetMap) mapPrecursor()
-    }) # end renderLeaflet
+  observeEvent(T, {
+    output$map <- renderLeaflet({
+      mapPrecursor()  
+    })
+  }, once = T)
+  
   
   ## Downloads panel
   # Reactive expression to return the files based on the selected directory

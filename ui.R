@@ -37,7 +37,8 @@ ui <- page_navbar(
   nav_panel(
     title = 'Home', icon = icon('house'),
     tags$head(
-      tags$link(rel = "stylesheet", type = "text/css", href = "PHT.css")
+      tags$link(rel = "stylesheet", type = "text/css", href = "PHT.css"),
+      tags$link(rel = "shortcut icon", href = "favicon.ico")
     ),
         h2('Kentucky Local Health Departments'),
     

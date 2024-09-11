@@ -67,7 +67,9 @@ currentDate <- readRDS(file = 'dat/currentDate.rds')
 
 # boilerplate -------------------------------------------------------------
 
-
+realignViewOfKentucky <- function(moreover) {
+  setView(moreover, lng = -85.711244, lat = 37.735969, zoom = 8)
+}
 
 # load(file = 'dat/ky_joined.RData')
 
@@ -116,7 +118,7 @@ shapefile <- merge(shapefile, y, by = 'FID')
 
 # pal <- colorNumeric(palette = "viridis", domain = shapefile$FID)
 # qpal <- colorFactor(palette = c('#004080', '#001F3F'), domain = shapefile$Compliance.Status)
-qpal <- colorFactor(palette = c('gray', chfs$cols9[9]), domain = shapefile$Compliance.Status)
+qpal <- colorFactor(palette = c(chfs$cols9[6], chfs$cols9[2]), domain = shapefile$Compliance.Status)
 
 
 # leaflet() %>%
