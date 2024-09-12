@@ -9,7 +9,7 @@ ui <- page_navbar(
 # theme -------------------------------------------------------------------
 
   
-  theme = bs_theme(5, bootswatch = 'cyborg',secondary=chfs$cols9[1],primary=chfs$cols9[1],
+  theme = bs_theme(5, bootswatch = 'cyborg',secondary=chfs$cols9[9],primary=chfs$cols9[1],
                    
                    base_font = font_google("Montserrat", local = TRUE)),# base_font = font_google("Inter")),
   # theme = bs_theme(
@@ -41,6 +41,7 @@ ui <- page_navbar(
       tags$link(rel = "shortcut icon", href = "favicon.ico")
     ),
         h2('Kentucky Local Health Departments'),
+    HTML("<p>This site hosts Kentucky Local Health Departments' <span style=\"color: white; font-weight: bold;\"> most recently completed Local Needs Assessment</span>, (also called Community Health Assessment [CHA], Community Health Improvement Plan [CHIP], Community Health Needs Assessment [CHNA], or other similar, community focused assessments of population health) for their jurisdiction served as <a href=\"KentuckyLaw.pdf\" target=\"_blank\">required by Kentucky law.</a></p>"),
     
 
 # navset_card_tab ---------------------------------------------------------
@@ -73,7 +74,7 @@ ui <- page_navbar(
       nav_panel(
         title = tagList(icon("cloud-arrow-down"), "Downloads"),
         h3('Directly download available files'),
-        card_title("Contains same data as the map location markers"),
+        card_title("Same data as found within the map location markers"),
         sidebarLayout(
           sidebarPanel(
             # selectInput("directory", "Choose a Directory:", choices = unique(nested_data$dir))

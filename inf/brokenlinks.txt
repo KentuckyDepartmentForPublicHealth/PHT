@@ -1,0 +1,17 @@
+PROBLEMS
+
+BROKEN LINKS
+Bracken: https://reports.mysidewalk.com/de8897363e
+Christian:https://christiancountyhd.com/wp-content/uploads/2020/09/2020-CHA_CHIP-Final-Draft.pdf
+Purchase: http://purchasehealth.org/wp-content/uploads/2015/06/CHA-final.pdf
+
+Clark: Figures not aligned correctly
+
+Garrard: not using encryption on site:
+http://danvilleregion.healthforecast.net/
+http://emflh.healthforecast.net/index-1.html
+http://emjbhh.healthforecast.net/
+
+Pennyrile: Raw excel data not good
+Powell: Woefully inadequate
+

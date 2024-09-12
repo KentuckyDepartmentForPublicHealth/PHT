@@ -46,18 +46,19 @@ server <- function(input, output, session) {
         fillOpacity = 1,
         color = 'white',
         weight = 2,
-        label = if (!input$showpopup) {NULL} else {sprintf("%s",
-                                                           paste('<span style="font-size: 1.5em">',
-                                                                 # "<b>Geography: </b>", shapefile$NAME10, '<br>',
-                                                                 '<b>LHD: </b>', shapefile$NAME10, '<br>',
-                                                                 '<b>Counties: </b>',shapefile$Listing, '<br>',
-                                                                 # "<b>Variable: </b>", a('link', href = 'kde.org', target='_blank'), '<br>',
-                                                                 "<b>Completed? </b>", shapefile$Status, '</span>'
-                                                           )
+        label = if (!input$showpopup) {NULL} else {
+          sprintf("%s",
+           paste('<span style="font-size: 1.5em">',
+                 # "<b>Geography: </b>", shapefile$NAME10, '<br>',
+                 '<b>LHD: </b>', shapefile$NAME10, '<br>',
+                 '<b>Counties: </b>',shapefile$Listing, '<br>',
+                 # "<b>Variable: </b>", a('link', href = 'kde.org', target='_blank'), '<br>',
+                 "<b>Completed? </b>", shapefile$Status, '</span>'
+           )
         ) %>%
             lapply(htmltools::HTML)}
       ) %>% 
-      addControl(paste('Title 902 | Chapter 008 | Regulation 160',br(), br(), 'Local Needs Assessment'), position = 'topright') %>%
+      addControl(paste('902 KAR 8:160 Local health department operations requirements',br(), br(), 'Section 10: Identification of Local Needs'), position = 'topright') %>%
       addLegend(title = HTML(paste0("<span style='color: #0C3151; font-size: 1.2em;'>", 'Completed?',"</span>")),
                 position = 'topright',
                 values = ~Status, # change here
