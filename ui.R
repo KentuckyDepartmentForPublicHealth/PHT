@@ -41,7 +41,7 @@ ui <- page_navbar(
       tags$link(rel = "shortcut icon", href = "favicon.ico")
     ),
         h2('Kentucky Local Health Departments'),
-    HTML("<p>This site hosts Kentucky Local Health Departments' <span style=\"color: white; font-weight: bold;\"> most recently completed Local Needs Assessment</span>, (also called Community Health Assessment [CHA], Community Health Improvement Plan [CHIP], Community Health Needs Assessment [CHNA], or other similar, community focused assessments of population health) for their jurisdiction served as <a href=\"KentuckyLaw.pdf\" target=\"_blank\">required by Kentucky law.</a></p>"),
+    HTML("<p>This site hosts Kentucky Local Health Departments' <span style=\"color: white; font-weight: bold;\"> most recently completed Local Needs Assessment</span> (also called Community Health Assessment [CHA], Community Health Improvement Plan [CHIP], Community Health Needs Assessment [CHNA]) for their jurisdiction served as <a href=\"KentuckyLaw.pdf\" target=\"_blank\">required by Kentucky law.</a></p>"),
     
 
 # navset_card_tab ---------------------------------------------------------
