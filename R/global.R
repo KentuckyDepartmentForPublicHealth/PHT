@@ -68,7 +68,7 @@ link_naccho <- tags$a(
 
 # leaflet -----------------------------------------------------------------
 
-# select2cols <- readxl::read_xlsx('dat/select2cols.xlsx') %>%
+# select2cols <- readxl::read_xlsx('dat/select2cols.xlsx') |>
 # dplyr::select(FID, Listing, Status)
 # 
 # save(select2cols, file = 'dat/select2cols.RData')
