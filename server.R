@@ -11,6 +11,10 @@ server <- function(input, output, session) {
   # })
   # 
 
+  # observe({
+  #   toggle_dark_mode(session, dark = input$dark_mode %in% 'dark')
+  # })  
+  # 
   # Use leafletProxy() to update the map on reset instead of re-rendering it
   observeEvent(input$resetMap, {
     updateRadioButtons(session, 'labelthemap', selected = '12px')

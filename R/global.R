@@ -46,6 +46,16 @@ currentDate <- readRDS(file = 'dat/currentDate.rds')
 # rsconnect::deployApp(account = 'kdph', appName = 'pht-dashboard', appVisibility = 'private', logLevel = 'verbose')
 
 
+# theme -------------------------------------------------------------------
+
+# base_theme <- bs_theme(
+#   version = 5,
+#   primary = "#007bff",
+#   secondary = "#6c757d",
+#   # Set up custom variables for dark mode if needed
+#   "body-bg" = "#ffffff",
+#   "body-color" = "#000000"
+# )
 # boilerplate -------------------------------------------------------------
 
 realignViewOfKentucky <- function(moreover) {

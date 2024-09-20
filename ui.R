@@ -8,10 +8,11 @@ ui <- page_navbar(
 
 # theme -------------------------------------------------------------------
 
-  
-  theme = bs_theme(5, bootswatch = 'cyborg',secondary=chfs$cols9[9],primary=chfs$cols9[1],
-                   
-                   base_font = font_google("Montserrat", local = TRUE)),# base_font = font_google("Inter")),
+
+ theme = bs_theme(5, bootswatch = 'cyborg',secondary=chfs$cols9[9],primary=chfs$cols9[1]),
+  # theme = bs_theme(5, bootswatch = 'cyborg',secondary=chfs$cols9[9],primary=chfs$cols9[1],
+  #                  
+  #                  base_font = font_google("Montserrat", local = TRUE)),# base_font = font_google("Inter")),
   # theme = bs_theme(
   #   # Controls the default grayscale palette
   #   bg = "#e3e4e4", fg = "black",
@@ -41,7 +42,7 @@ ui <- page_navbar(
       tags$link(rel = "shortcut icon", href = "favicon.ico")
     ),
         h2('Kentucky Local Health Departments'),
-    HTML("<p>This site hosts Kentucky Local Health Departments' <span style=\"color: white; font-weight: bold;\"> most recently completed Local Needs Assessment</span> (also called Community Health Assessment [CHA], Community Health Improvement Plan [CHIP], Community Health Needs Assessment [CHNA]) for their jurisdiction served as <a href=\"KentuckyLaw.pdf\" target=\"_blank\">required by Kentucky law.</a></p>"),
+    HTML("<p>This site hosts Kentucky Local Health Departments' <span style=\"font-weight: bold;\"> most recently completed Local Needs Assessment</span> (also called Community Health Assessment [CHA], Community Health Improvement Plan [CHIP], Community Health Needs Assessment [CHNA]) for their jurisdiction served as <a href=\"KentuckyLaw.pdf\" target=\"_blank\">required by Kentucky law.</a></p>"),
     
 
 # navset_card_tab ---------------------------------------------------------
@@ -109,9 +110,9 @@ ui <- page_navbar(
     nav_item(link_khda),
     nav_item(link_naccho)
   ),
-  # nav_item(
-  #   input_dark_mode(id = "dark_mode", mode = "dark") #
-  # ),
+  nav_item(
+    input_dark_mode(id = "dark_mode", mode = "light") #
+  ),
   # nav_item(
   #   tags$a('KDPH', title = 'Kentucky Department for Public Health', href = 'https://www.chfs.ky.gov/agencies/dph/Pages/default.aspx', target = '_blank')
   # ),
