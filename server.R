@@ -10,16 +10,28 @@ server <- function(input, output, session) {
   #     ggplot(aes(!!sym(input$var), !!sym(input$var2), color = factor(cyl))) 
   # })
   # 
-
-  # observe({
-  #   toggle_dark_mode(session, dark = input$dark_mode %in% 'dark')
-  # })  
+  output$my_value_box <- renderUI({
+    value_box(
+      title = "Percent of statewide health departments/districts with an LNA submission", 
+      value = paste0(sprintf('%0.0f', prop.table(table(shapefile$Status) )[[2]] * 100 ), '%'),
+      theme = value_box_theme(
+        bg = if (input$mode_toggle %in% 'dark') chfs$cols9[2] else chfs$cols9[9],
+        fg = if (input$mode_toggle %in% 'dark') 'white' else chfs$cols9[2]
+      ),
+      showcase = icon('calendar-check'),
+      showcase_layout = "top right", full_screen = F, fill = F,
+      height = "150px",      # Set height of the value box
+      min_height = "100px",  # Set minimum height
+      max_height = "200px"   # Set maximum height
+    )
+  })
   # 
   # Use leafletProxy() to update the map on reset instead of re-rendering it
   observeEvent(input$resetMap, {
     updateRadioButtons(session, 'labelthemap', selected = '12px')
     update_switch('showmarkers', value = TRUE)
     update_switch('showpopup', value = TRUE)
+    updateSelectInput(session, 'whichcounty', selected = 'All')
     
     leafletProxy("map") %>% 
       realignViewOfKentucky()
@@ -29,6 +41,12 @@ server <- function(input, output, session) {
   })
   
   
+
+  
+  # observeEvent(shapefileReactive(), {
+  #   leafletProxy("map", data = shapefileReactive())
+  # })
+  # 
   observeEvent(input$resetdownloads, {
     # Reset the selected input (e.g., set 'bydirectory' back to 'Allen County')
     updateSelectInput(session, 'bydirectory', selected = 'Allen County')
@@ -40,13 +58,37 @@ server <- function(input, output, session) {
   })
   
 
-# leaflet -----------------------------------------------------------------
+# qpal --------------------------------------------------------------------
 
+
+
+  qpal <- reactive({
+  if (input$mode_toggle %in% 'dark') {
+    
+  # dark  
+colorFactor(palette = c(chfs$cols9[2], chfs$cols9[7]), domain = shapefile$Status)
+  } else {  
+  
+  # light
+colorFactor(palette = c(chfs$cols9[9], chfs$cols9[1]), domain = shapefile$Status)
+  }
+  })
+  
+  shapefileReactive <- eventReactive(input$whichcounty, {
+    if (!input$whichcounty %in% 'All') {
+      shapefile %>%
+        dplyr::filter(grepl(input$whichcounty, Listing))
+    } else {
+      shapefile 
+    }
+  }, ignoreInit = F)
+  
+# leaflet -----------------------------------------------------------------
   mapPrecursor <- reactive({
     
-    leaflet(shapefile) %>% 
-      addPolygons(
-        fillColor = ~qpal(Status),
+    leaflet(shapefileReactive()) %>% 
+      addPolygons(,
+        fillColor = ~qpal()(Status),
         fillOpacity = 1,
         color = 'white',
         weight = 2,
@@ -54,68 +96,69 @@ server <- function(input, output, session) {
           sprintf("%s",
            paste('<span style="font-size: 1.5em">',
                  # "<b>Geography: </b>", shapefile$NAME10, '<br>',
-                 '<b>LHD: </b>', shapefile$NAME10, '<br>',
-                 '<b>Counties: </b>',shapefile$Listing, '<br>',
+                 '<b>LHD: </b>', shapefileReactive()$NAME10, '<br>',
+                 '<b>Counties: </b>',shapefileReactive()$Listing, '<br>',
                  # "<b>Variable: </b>", a('link', href = 'kde.org', target='_blank'), '<br>',
-                 "<b>Completed? </b>", shapefile$Status, '</span>'
+                 "<b>Submitted? </b>", shapefileReactive()$Status, '</span>'
            )
         ) %>%
             lapply(htmltools::HTML)}
       ) %>% 
       addControl(paste('902 KAR 8:160 Local health department operations requirements',br(), br(), 'Section 10: Identification of Local Needs'), position = 'topright') %>%
-      addLegend(title = HTML(paste0("<span style='color: #0C3151; font-size: 1.2em;'>", 'Completed?',"</span>")),
+      addLegend(title = HTML(paste0("<span style='color: #0C3151; font-size: 1.2em;'>", 'Submitted?',"</span>")),
                 position = 'topright',
                 values = ~Status, # change here
-                # pal =  qpal(), # app WORKS
+                pal =  qpal(), # app WORKS
                 # pal =  isolate(qpal()), # app WORKS
-                pal = qpal, # interactive
+                # pal = qpal, # interactive
                 opacity = 1
       ) %>%
-      # {if (!input$showmarkers) {.} else { addMarkers(.,
-      #            lng = ~ as.numeric(unlist(INTPTLON10)), 
-      #            lat = ~ as.numeric(unlist(INTPTLAT10)),
-      #            popup = sprintf(
-      #                paste0('<a href="%s" target="_blank">CHA/CHIP</a>'),
-      #                serve_submissions1
-      #              )
-      #   )}} %>%
       {if (!input$showmarkers) {.} else {
         addMarkers(.,
                    lng = ~ as.numeric(unlist(INTPTLON10)),
                    lat = ~ as.numeric(unlist(INTPTLAT10)),
                    popup = ~{
-                     lapply(1:nrow(shapefile), function(i) {
+                     lapply(1:nrow(shapefileReactive()), function(i) {
                        marker_files <- nested_data_flat %>%
-                         filter(NAME == shapefile$NAMELSAD10[i])
-                       
+                         filter(NAME %in% shapefileReactive()$NAMELSAD10[i])
+
                        if (nrow(marker_files) == 0 || all(is.na(marker_files$files))) {
                          "No files available"
                        } else {
-                         paste0("<ul>", 
-                                paste0("<li><a href='", marker_files$files, 
-                                       "' target='_blank'>", 
-                                       basename(marker_files$files), 
-                                       "</a></li>", collapse = ""), 
+                         paste0("<ul class='mapfilebullet'>",
+                                paste0("<li><a href='", marker_files$files,
+                                       "' target='_blank'>",
+                                       basename(marker_files$files),
+                                       "</a></li>", collapse = ""),
                                 "</ul>")
                        }
                      })
                    })
       }} %>%
-      # addMarkers(lng = centroid_coords[, 1], lat = centroid_coords[, 2]) %>% 
+      # addMarkers(lng = centroid_coords[, 1], lat = centroid_coords[, 2]) %>%
       {if (input$labelthemap %in% 'nolabels') {.} else {addLabelOnlyMarkers(.,
-                                                                            lng = ~ as.numeric(unlist(INTPTLON10)), lat = ~ as.numeric(unlist(INTPTLAT10)),
-                                                                            label = ~ NAMELSAD10, 
-                                                                            icon = NULL,
-                                                                            labelOptions = labelOptions(
-                                                                              noHide = TRUE,
-                                                                              sticky=F,
-                                                                              textsize = input$labelthemap,
-                                                                              textOnly = T,
-                                                                              style = list("color" = 'white') #e95420 #772953
-                                                                            )
-      )}} %>% 
-      realignViewOfKentucky() %>% 
-      leaflet.extras::setMapWidgetStyle(., list(background= 'black'))
+        lng = ~ as.numeric(unlist(INTPTLON10)), lat = ~ as.numeric(unlist(INTPTLAT10)),
+        label = ~ NAMELSAD10,
+        icon = NULL,
+        labelOptions = labelOptions(
+          noHide = TRUE,
+          sticky=F,
+          textsize = input$labelthemap,
+          textOnly = T,
+          style = if (input$mode_toggle %in% 'light') {
+            list(
+              "color" =  "black",
+                'text-shadow' = '0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff'
+            ) }
+          else {
+           list(
+              "color" = "white",
+                'text-shadow' = '0 0 10px #95D3F5, 0 0 10px #95D3F5, 0 0 10px #95D3F5'
+          )
+      }
+      ))}} %>%
+      leaflet.extras::setMapWidgetStyle(., if (input$mode_toggle %in% 'light') list(background = '#ddd') else list(background = 'black'))
+      # {if (!input$whichcounty %in% 'All') {setView(., lng = as.numeric(unlist(INTPTLON10)), lat = as.numeric(unlist(INTPTLAT10)), zoom = 8)} else  { realignViewOfKentucky(.) } }# %>%
   })
   
   observeEvent(T, {

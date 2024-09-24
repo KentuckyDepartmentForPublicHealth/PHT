@@ -3,26 +3,26 @@
   color: black;
   margin: 1em;
   padding: 1em;
-  border: 2px solid black;
+  border: 2px solid gray;
 }
 
 .card-body {
-  #background-color: #001F3F  ;
+  #background-color: white  ;
 }
 
 .well {
-  background-color: #00060C;  /* Change this to your desired color */
-  color: white;  /* Change text color to white */
+  #background-color: #00060C;  /* Change this to your desired color */
+  #color: white;  /* Change text color to white */
 }
 /*.navset-card-tab .leaflet-container {
   height: 100% !important;
   min-height: 1200px !important;
 }*/
-/*#map {
-  height: 1400px !important;
-  width: 100% !important;
-}*/
-
+#map {
+  #height: 1400px !important;
+  #width: 100% !important;
+   border-radius: 8px;
+}
 blockquote {
    # margin: 0 0 1rem;
     #padding: .625rem 1.25rem;
@@ -30,4 +30,10 @@ blockquote {
     border-right: .5rem solid #e9ecef;
     border-radius: 15px;
     text-align: center;
+}
+
+.mapfilebullet {
+  list-style-type: none;
+  padding: 0.25em;
+  margin: 0.25em;
 }

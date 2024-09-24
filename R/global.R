@@ -16,13 +16,14 @@ library(DT)
 library(magrittr)
 library(dplyr)
 library(tidyr)
+library(stringr)
 library(purrr)
 library(leaflet)
 library(sf)
 library(leaflet.extras)
 library(fresh)
 library(shinycssloaders)
-
+library(bsicons)
 
 # colors ------------------------------------------------------------------
 
@@ -37,6 +38,11 @@ chfs <- list(
   cols9 = c('#5CB2E5', '#0C3151', '#305E4C', '#76AB48','#00060C', '#305E4C', '#517F44', '#76AB48', '#9FCA70')
 )
 
+
+
+
+
+
 # deploy ------------------------------------------------------------------
 
 # currentDate <- format(Sys.time(), '%a, %b %d, %Y at %I:%M %p EDT')
@@ -47,6 +53,7 @@ currentDate <- readRDS(file = 'dat/currentDate.rds')
 
 
 # theme -------------------------------------------------------------------
+# my_theme <- bs_theme(5, bootswatch = 'sandstone')
 
 # base_theme <- bs_theme(
 #   version = 5,
@@ -58,9 +65,14 @@ currentDate <- readRDS(file = 'dat/currentDate.rds')
 # )
 # boilerplate -------------------------------------------------------------
 
-realignViewOfKentucky <- function(moreover) {
-  setView(moreover, lng = -85.711244, lat = 37.735969, zoom = 8)
+realignViewOfKentucky <- function(shapefile) {
+  setView(shapefile, lng = -85.711244, lat = 37.735969, zoom = 8)
 }
+
+# modeToggling <- function(map, background) {
+#   leaflet.extras::setMapWidgetStyle(map, list(background = 'red'))
+# }
+
 
 # load(file = 'dat/ky_joined.RData')
 
@@ -74,10 +86,19 @@ link_naccho <- tags$a(
   href = "https://www.naccho.org/membership/lhd-directory?searchType=standard&lhd-state=KY#card-filter",
   target = "_blank"
 )
+link_lhdmap <- tags$a(
+  shiny::icon("globe"), "Kentucky Districts and Counties (PDF Map)",
+  href = "LHDdistrictsandcounties.pdf",
+  target = "_blank"
+)
 
 
 # leaflet -----------------------------------------------------------------
-
+# ky_counties <- DBI::dbGetQuery(con, 'select * from geo.ky_county') %>% 
+#   select(NAME2) %>% 
+#   pull()
+# saveRDS(ky_counties, 'dat/ky_counties.rds')
+ky_counties <- readRDS('dat/ky_counties.rds') 
 # select2cols <- readxl::read_xlsx('dat/select2cols.xlsx') |>
 # dplyr::select(FID, Listing, Status)
 # 
@@ -95,7 +116,7 @@ load(file = 'dat/shapefile.RData')
 
 # pal <- colorNumeric(palette = "viridis", domain = shapefile$FID)
 # qpal <- colorFactor(palette = c('#004080', '#001F3F'), domain = shapefile$Compliance.Status)
-qpal <- colorFactor(palette = c(chfs$cols9[6], chfs$cols9[2]), domain = shapefile$Status)
+# qpal <- colorFactor(palette = c(chfs$cols9[6], chfs$cols9[2]), domain = shapefile$Status)
 
 # Function to read directories and capture files along with their folder names
 read_files_from_directories <- function(base_dir) {
@@ -125,27 +146,48 @@ nested_data_flat <- nested_data2 %>%
 
 
 
-
 # extra -------------------------------------------------------------------
 
 
 # fresh -------------------------------------------------------------------
+# using a temporary file but use the path you want
+# using a temporary file but use the path you want
+# tmp <- file.path(tempdir(), "custom-theme.css")
 
 # my_theme <- create_theme(
 #   bs4dash_vars(
-#     navbar_light_color = "#FFFFFF",   # Text color
-#     navbar_light_active_color = "#FFD700", # Active link color (gold)
-#     navbar_light_hover_color = "#FFD700"  # Hover link color (gold)
+#     # Navbar colors
+#     navbar_light_color = "#305E4C",  # Text color for the light navbar
+#     navbar_light_active_color = "#76AB48", # Active link color for the light navbar
+#     navbar_light_hover_color = "#76AB48",  # Hover link color for the light navbar
+#     
+#     # General body styles
+#     body_bg = "#FFFFFF",  # Lighter body background color for light mode
+#     text_color = "#0C3151", # Text color for body
+#     
+#     # Sidebar styles for light mode
+#     sidebar_light_bg = "#F7F9FB",  # Lighter sidebar background color for light mode
+#     sidebar_light_color = "#0C3151",  # Sidebar text color in light mode
+#     sidebar_light_hover_color = "#76AB48",  # Sidebar hover text color in light mode
+#     sidebar_light_active_color = "#76AB48",  # Sidebar active link color in light mode
+#     
+#     # Sidebar styles for dark mode
+#     sidebar_dark_bg = "#0C3151",  # Darker sidebar background color for dark mode
+#     sidebar_dark_color = "#FFFFFF",  # Sidebar text color in dark mode
+#     sidebar_dark_hover_color = "#76AB48",  # Sidebar hover text color in dark mode
+#     sidebar_dark_active_color = "#76AB48"  # Sidebar active link color in dark mode
 #   ),
 #   bs4dash_yiq(
 #     contrasted_threshold = 10,
 #     text_dark = "#FFFFFF",  # Text color for dark background
-#     text_light = "#004080"  # Text color for light background
+#     text_light = "#0C3151"  # Text color for light background
 #   ),
 #   bs4dash_layout(
-#     main_bg = "#004080"  # Navbar background color
+#     main_bg = "#FFFFFF"  # Lighter main background for light mode
 #   )
 # )
+
+
 
 
 
