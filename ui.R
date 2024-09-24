@@ -1,5 +1,5 @@
 
-ui <- page_navbar(
+ui <- page_navbar(id = 'navBar',
   title = span(img(src = "DPH_and_PHAB_logo-removebg-preview.png", height = "75px"),  # Adjust height as needed
                "Public Health Transformation (PHT) Dashboard",
                style = 'vertical-align: middle;'
@@ -28,13 +28,12 @@ ui <- page_navbar(
 
 
   header = NULL,
-footer = div(
-  id = "footer-content",
-  style = "text-align: center; padding: 10px; background-color: #f8f9fa; border-top: 1px solid #dee2e6;",
-  paste('Last updated:', currentDate)
-),
+footer = NULL,
   
   nav_spacer(),
+
+# home --------------------------------------------------------------------
+
   
   nav_panel(
     title = 'Home', icon = icon('house'),
@@ -56,17 +55,15 @@ footer = div(
 
 # map ---------------------------------------------------------------------
         h4(span(icon('map'), 'Interactive Map Explorer', style = paste0('color:', chfs$cols9[1]))),
-        "Click location markers for downloadable information",
+        span("Click location markers for downloadable information", style = 'text-align: left;'),
+       span(paste('Last updated:', currentDate), style = 'font-size: .75em; text-align: right;'),
         # p('Zoom in ( + )'),
         # p('Zoom out (', HTML('&ndash;'), ')'),
         div(
           class = "leaflet-wrapper",  # Wrapping in a div for additional control
           withSpinner(leafletOutput('map', height = '800px'), type = 3, color.background = 'black', color = chfs$cols9[1])  # Setting explicit height
-        ),
-        div(
-          style = "margin-bottom: 30px;",  # Adds space between the value box and the footer
-          uiOutput("my_value_box")
         )
+
       # nav_panel(
       #   shiny::icon("circle-info"),
       #   markdown(HTML('<p>Contact the dashboard <a href="mailto:adam.berrones@ky.gov">developer</a>'))
@@ -94,6 +91,17 @@ footer = div(
     )
   ),
 
+
+# stats -------------------------------------------------------------------
+
+nav_panel(
+  title = "Stats", icon = icon('chart-bar'),
+  align = "right",
+  div(
+    style = "margin-bottom: 30px;",  # Adds space between the value box and the footer
+    uiOutput("my_value_box")
+  )
+),
 
 # nav_panel(
 #   title = "About", icon = icon('barcode'),
@@ -126,8 +134,8 @@ footer = div(
 # sidebar -----------------------------------------------------------------
 
   
-  sidebar = sidebar(
-    h4('Toolbar'),
+  sidebar = sidebar(id = 'mySidebar',
+    h4('Map Toolbar'),
     actionButton('resetMap', 'Reset Map', icon=icon('rotate')),
     selectInput('whichcounty', strong('County Zoom'), choices = c('All', ky_counties), selected = T),
     br(),
@@ -144,6 +152,7 @@ footer = div(
     input_switch('showpopup', 'Show hover info?', value = T)
     ),
     hr(),
+    
     tags$blockquote(a('Powered by the Kentucky Department for Public Health',  href = 'https://www.chfs.ky.gov/agencies/dph/Pages/default.aspx', target = '_blank')),
     
   )

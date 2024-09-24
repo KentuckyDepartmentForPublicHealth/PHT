@@ -65,6 +65,8 @@ currentDate <- readRDS(file = 'dat/currentDate.rds')
 # )
 # boilerplate -------------------------------------------------------------
 
+numberOfListings <- system("find './www/Listing' -type f ! -path '*/.*'  | sort | wc -l", intern = T)
+
 realignViewOfKentucky <- function(shapefile) {
   setView(shapefile, lng = -85.711244, lat = 37.735969, zoom = 8)
 }
@@ -143,6 +145,13 @@ nested_data2 <- read_files_from_directories(c('www/Listing/'))
 
 nested_data_flat <- nested_data2 %>%
   unnest(cols = files, keep_empty = T)
+
+
+
+
+
+
+# end ---------------------------------------------------------------------
 
 
 

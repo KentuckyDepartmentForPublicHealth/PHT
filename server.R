@@ -10,19 +10,69 @@ server <- function(input, output, session) {
   #     ggplot(aes(!!sym(input$var), !!sym(input$var2), color = factor(cyl))) 
   # })
   # 
+  
+  observe({
+    # close sidebar when not in Home
+    if (!input$navBar %in% 'Home') {
+    sidebar_toggle(
+      id = "mySidebar",
+      open = F
+    )
+    } else {
+    sidebar_toggle(
+      id = "mySidebar",
+      open = T
+    )
+    }
+  })
+  
+  
   output$my_value_box <- renderUI({
+    layout_columns(
     value_box(
-      title = "Percent of statewide health departments/districts with an LNA submission", 
+      title = "Statewide percent of health departments/districts who've submitted a Local Needs Assessment", 
       value = paste0(sprintf('%0.0f', prop.table(table(shapefile$Status) )[[2]] * 100 ), '%'),
       theme = value_box_theme(
         bg = if (input$mode_toggle %in% 'dark') chfs$cols9[2] else chfs$cols9[9],
         fg = if (input$mode_toggle %in% 'dark') 'white' else chfs$cols9[2]
       ),
       showcase = icon('calendar-check'),
-      showcase_layout = "top right", full_screen = F, fill = F,
-      height = "150px",      # Set height of the value box
-      min_height = "100px",  # Set minimum height
-      max_height = "200px"   # Set maximum height
+      showcase_layout = "top right", full_screen = T, fill = T,
+      height = NULL     # Set height of the value box
+    ),
+    value_box(
+      title = "Number of downloadable files available in this site", 
+      value = numberOfListings,
+      theme = value_box_theme(
+        bg = if (input$mode_toggle %in% 'dark') chfs$cols9[2] else chfs$cols9[9],
+        fg = if (input$mode_toggle %in% 'dark') 'white' else chfs$cols9[2]
+      ),
+      showcase = icon('hashtag'),
+      showcase_layout = "top right", full_screen = T, fill = T,
+      height = NULL      # Set height of the value box
+    )
+    # value_box(
+    #   title = "Top Health Priorities",
+    #   value = HTML("<ol>
+    #   <li>Substance Abuse</li>
+    #   <li>Physical Health</li>
+    #   <li>Mental Health</li>
+    #   <li>Access To Care</li>
+    #   <li>Tobacco</li>
+    #   <li>Cancer</li>
+    #   <li>Diabetes</li>
+    #   <li>Food Security/Access</li>
+    #   <li>Cardiovascular Disease</li>
+    #   <li>Housing</li>
+    #   </ol>"),
+    #   theme = value_box_theme(
+    #     bg = if (input$mode_toggle %in% 'dark') chfs$cols9[2] else chfs$cols9[9],
+    #     fg = if (input$mode_toggle %in% 'dark') 'white' else chfs$cols9[2]
+    #   ),
+    #   showcase = icon('calendar-check'),
+    #   showcase_layout = "top right", full_screen = T, fill = T,
+    #   height = NULL      # Set height of the value box
+    # )
     )
   })
   # 
