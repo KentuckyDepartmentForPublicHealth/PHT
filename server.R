@@ -114,23 +114,22 @@ server <- function(input, output, session) {
 
 # qpal --------------------------------------------------------------------
 
-
-
   qpal <- reactive({
   if (input$mode_toggle %in% 'dark') {
     
   # dark  
-colorFactor(palette = c(chfs$cols9[2], chfs$cols9[7]), domain = shapefile$Status)
+  colorFactor(palette = c(chfs$cols9[2], chfs$cols9[7]), domain = shapefile$Status)
   } else {  
   
   # light
-colorFactor(palette = c(chfs$cols9[9], chfs$cols9[1]), domain = shapefile$Status)
+  colorFactor(palette = c(chfs$cols9[9], chfs$cols9[1]), domain = shapefile$Status)
   }
   })
   
   shapefileReactive <- eventReactive(input$whichcounty, {
     if (!input$whichcounty %in% 'All') {
       shapefile %>%
+        mutate(whichrow = row_number()) %>% 
         dplyr::filter(grepl(input$whichcounty, Listing))
     } else {
       shapefile 
@@ -211,13 +210,14 @@ colorFactor(palette = c(chfs$cols9[9], chfs$cols9[1]), domain = shapefile$Status
           )
       }
       ))}} %>%
-      leaflet.extras::setMapWidgetStyle(., if (input$mode_toggle %in% 'light') list(background = '#ddd') else list(background = 'black'))
-      # {if (!input$whichcounty %in% 'All') {setView(., lng = as.numeric(unlist(INTPTLON10)), lat = as.numeric(unlist(INTPTLAT10)), zoom = 8)} else  { realignViewOfKentucky(.) } }# %>%
+      leaflet.extras::setMapWidgetStyle(., if (input$mode_toggle %in% 'light') list(background = '#ddd') else list(background = 'black')) %>% 
+      # {if (input$whichcounty %in% 'All') { realignViewOfKentucky(.) } else {setView(., lng = as.numeric(unlist(shapefileReactive()$INTPTLON10)), lat = as.numeric(unlist(shapefileReactive()$INTPTLAT10)), zoom = 9)}}
+      {if (input$whichcounty %in% 'All') { realignViewOfKentucky(.) } else {setView(., lng = centroid_coords[, 1][[shapefileReactive()$whichrow]], lat = centroid_coords[, 2][[shapefileReactive()$whichrow]], zoom = 10)}}
   })
   
   observeEvent(T, {
     output$map <- renderLeaflet({
-      mapPrecursor()  
+      mapPrecursor()   
     })
   }, once = T)
   

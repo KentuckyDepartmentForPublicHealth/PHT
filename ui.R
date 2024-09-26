@@ -61,7 +61,7 @@ footer = NULL,
         # p('Zoom out (', HTML('&ndash;'), ')'),
         div(
           class = "leaflet-wrapper",  # Wrapping in a div for additional control
-          withSpinner(leafletOutput('map', height = '800px'), type = 3, color.background = 'black', color = chfs$cols9[1])  # Setting explicit height
+          withSpinner(leafletOutput('map', height = '850px'), type = 3, color.background = 'black', color = chfs$cols9[1])  # Setting explicit height
         )
 
       # nav_panel(
@@ -137,7 +137,7 @@ nav_panel(
   sidebar = sidebar(id = 'mySidebar',
     h4('Map Toolbar'),
     actionButton('resetMap', 'Reset Map', icon=icon('rotate')),
-    selectInput('whichcounty', strong('County Zoom'), choices = c('All', ky_counties), selected = T),
+    selectInput('whichcounty', strong('County Zoom'), choices = c('All', ky_counties), selected = 'All'),
     br(),
     # input_switch('showallcounties', 'Show all counties?', value = T),
     # hr(),

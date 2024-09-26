@@ -65,7 +65,8 @@ currentDate <- readRDS(file = 'dat/currentDate.rds')
 # )
 # boilerplate -------------------------------------------------------------
 
-numberOfListings <- system("find './www/Listing' -type f ! -path '*/.*'  | sort | wc -l", intern = T)
+# numberOfListings <- system("find './www/Listing' -type f ! -path '*/.*'  | sort | wc -l", intern = T)
+numberOfListings <- list.files('./www/Listing', recursive = T) |> length()
 
 realignViewOfKentucky <- function(shapefile) {
   setView(shapefile, lng = -85.711244, lat = 37.735969, zoom = 8)
@@ -114,6 +115,8 @@ load(file = 'dat/select2cols.RData') # add Listing
 load(file = 'dat/shapefile.RData')
 # centroids <- st_centroid(shapefile)
 # centroid_coords <- st_coordinates(centroids)
+# saveRDS(centroid_coords, 'dat/centroid_coords.rds')
+centroid_coords <- readRDS('dat/centroid_coords.rds')
 # shapefile$Compliance.Status <- sample(c('Yes','No','Yes','Yes','Yes','Yes'), 61, replace = T)
 
 # pal <- colorNumeric(palette = "viridis", domain = shapefile$FID)
