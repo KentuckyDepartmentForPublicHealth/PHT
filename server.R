@@ -130,7 +130,9 @@ server <- function(input, output, session) {
     if (!input$whichcounty %in% 'All') {
       shapefile %>%
         mutate(whichrow = row_number()) %>% 
-        dplyr::filter(grepl(input$whichcounty, Listing))
+        # dplyr::filter(grepl(input$whichcounty, Listing))
+        # dplyr::filter(str_detect(Listing, fixed(input$whichcounty, ignore_case = TRUE)))
+        dplyr::filter(str_detect(Listing, paste0("(^|\\s)", input$whichcounty, "(\\s|$)")))
     } else {
       shapefile 
     }

@@ -97,9 +97,10 @@ link_lhdmap <- tags$a(
 
 
 # leaflet -----------------------------------------------------------------
-# ky_counties <- DBI::dbGetQuery(con, 'select * from geo.ky_county') %>% 
-#   select(NAME2) %>% 
+# ky_counties <- DBI::dbGetQuery(con, 'select * from geo.ky_county') %>%
+#   select(NAME2) %>%
 #   pull()
+# ky_counties[62] <- 'LaRue'
 # saveRDS(ky_counties, 'dat/ky_counties.rds')
 ky_counties <- readRDS('dat/ky_counties.rds') 
 # select2cols <- readxl::read_xlsx('dat/select2cols.xlsx') |>
