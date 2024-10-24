@@ -145,7 +145,7 @@ nav_panel(
     radioButtons('labelthemap', 
                  strong('Label Size'),
                  choices = c('No Labels' = 'nolabels', 'Small' = '8px', 'Medium' = '12px', 'Large' = '14px', 'X-Large' = '18px'),
-                 selected = '12px'
+                 selected = '8px'
     ),
     tags$strong('Customize'),
     input_switch('showmarkers', 'Show location markers?', value = T),
