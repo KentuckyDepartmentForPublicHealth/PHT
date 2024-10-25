@@ -82,7 +82,7 @@ server <- function(input, output, session) {
   # 
   # Use leafletProxy() to update the map on reset instead of re-rendering it
   observeEvent(input$resetMap, {
-    updateRadioButtons(session, 'labelthemap', selected = '8px')
+    updateRadioButtons(session, 'labelthemap', selected = '12px')
     update_switch('showmarkers', value = TRUE)
     update_switch('showpopup', value = TRUE)
     updateSelectInput(session, 'whichcounty', selected = 'All')
