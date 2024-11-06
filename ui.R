@@ -1,6 +1,6 @@
 
 ui <- page_navbar(id = 'navBar',
-  title = span(img(src = "DPH_and_PHAB_logo-removebg-preview.png", height = "75px"),  # Adjust height as needed
+  title = span(img(src = "DPH_and_PHAB_logo-removebg-preview.png", alt = "Kentucky Department for Public Health logo; and Public Health Accreditation Board Accredited Health logo", height = "75px"),  # Adjust height as needed
                "Public Health Transformation (PHT) Dashboard",
                style = 'vertical-align: middle;'
   ),
