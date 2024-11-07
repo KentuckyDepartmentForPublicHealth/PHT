@@ -154,13 +154,13 @@ server <- function(input, output, session) {
                  '<b>LHD: </b>', shapefileReactive()$NAME10, '<br>',
                  '<b>Counties: </b>',shapefileReactive()$Listing, '<br>',
                  # "<b>Variable: </b>", a('link', href = 'kde.org', target='_blank'), '<br>',
-                 "<b>Submitted? </b>", shapefileReactive()$Status, '</span>'
+                 "<b>LNA Submitted? </b>", shapefileReactive()$Status, '</span>'
            )
         ) %>%
             lapply(htmltools::HTML)}
       ) %>% 
       addControl(paste('902 KAR 8:160 Local health department operations requirements',br(), br(), 'Section 10: Identification of Local Needs'), position = 'topright') %>%
-      addLegend(title = HTML(paste0("<span style='color: #0C3151; font-size: 1.2em;'>", 'Submitted?',"</span>")),
+      addLegend(title = HTML(paste0("<span style='color: #0C3151; font-size: 1.2em;'>", 'LNA Submitted?',"</span>")),
                 position = 'topright',
                 values = ~Status, # change here
                 pal =  qpal(), # app WORKS
