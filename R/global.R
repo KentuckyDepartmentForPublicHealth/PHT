@@ -49,7 +49,7 @@ chfs <- list(
 # saveRDS(currentDate, file = 'dat/currentDate.rds')
 currentDate <- readRDS(file = 'dat/currentDate.rds')
 
-# rsconnect::deployApp(account = 'kdph', appName = 'pht-dashboard', appVisibility = 'private', logLevel = 'verbose')
+# rsconnect::deployApp(account = 'kdph', appName = 'pht-dashboard', appVisibility = 'public', logLevel = 'verbose')
 
 
 # theme -------------------------------------------------------------------
