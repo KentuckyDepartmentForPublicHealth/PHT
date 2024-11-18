@@ -115,7 +115,8 @@ nav_panel(
     align = "right",
     nav_item(link_khda),
     nav_item(link_naccho),
-    nav_item(link_lhdmap)
+    nav_item(link_lhdmap),
+    nav_item(link_pht_flyer)
   ),
 
 

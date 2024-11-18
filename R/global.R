@@ -95,6 +95,12 @@ link_lhdmap <- tags$a(
   target = "_blank"
 )
 
+link_pht_flyer <- tags$a(
+  shiny::icon("bullhorn"), "PHT Dashboard Flyer",
+  href = "KDPH PHT Dashboard.png",
+  target = "_blank"
+)
+
 
 # leaflet -----------------------------------------------------------------
 # ky_counties <- DBI::dbGetQuery(con, 'select * from geo.ky_county') %>%
