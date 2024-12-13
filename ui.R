@@ -116,6 +116,12 @@ nav_panel(
     nav_item(link_khda),
     nav_item(link_naccho),
     nav_item(link_lhdmap),
+    # br(),
+    nav_item(link_sha2023),
+    nav_item(link_sha2023_exec),
+    nav_item(link_ship2024),
+    nav_item(link_ship2024_exec),
+    # br(),
     nav_item(link_pht_flyer)
   ),
 
