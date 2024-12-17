@@ -10,3 +10,6 @@
 # Exclude all files and subdirectories inside www/Listing and www/doc
 www/Listing/**/*.*
 www/doc/**/*
+
+# Allow .gitkeep files to ensure directories are tracked
+!www/Listing/**/.gitkeep
