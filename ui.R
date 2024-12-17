@@ -42,7 +42,7 @@ footer = NULL,
       tags$link(rel = "shortcut icon", href = "favicon.ico")
     ),
         h2('Kentucky Local Health Departments'),
-    HTML("<p>This site hosts Kentucky Local Health Departments' <span style=\"font-weight: bold;\"> most recently submitted Local Needs Assessment (LNA)</span>, also called Community Health Assessment (CHA), Community Health Improvement Plan (CHIP) or Community Health Needs Assessment (CHNA), for their jurisdiction served as <a href=\"KentuckyLaw.pdf\" target=\"_blank\">required by Kentucky law.</a></p>"),
+    HTML("<p>This site hosts Kentucky Local Health Departments' <span style=\"font-weight: bold;\"> most recently submitted Local Needs Assessment (LNA)</span>, also called Community Health Assessment (CHA), Community Health Improvement Plan (CHIP) or Community Health Needs Assessment (CHNA), for their jurisdiction served as <a href=\"/doc/KentuckyLaw.pdf\" target=\"_blank\">required by Kentucky law.</a></p>"),
     
 
 # navset_card_tab ---------------------------------------------------------
