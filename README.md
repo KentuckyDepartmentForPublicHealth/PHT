@@ -1,1 +1,1 @@
-![KDPH PHT Dashboard Flyer](/www/KDPH%20PHT%20Dashboard.png)
+[![KDPH PHT Dashboard Flyer](/www/KDPH%20PHT%20Dashboard.png)](https://kdph.shinyapps.io/pht-dashboard)
