@@ -2,9 +2,11 @@
 .Rhistory
 .RData
 .Ruserdata
-# Include all subdirectories under Listing/
+
+# Include www/Listing and www/doc directories
 !www/Listing/
 !www/doc/
-# Exclude all files (of any type) in Listing/ and its subdirectories
+
+# Exclude all files and subdirectories inside www/Listing and www/doc
 www/Listing/**/*.*
-www/doc/**/*.*
+www/doc/**/*
