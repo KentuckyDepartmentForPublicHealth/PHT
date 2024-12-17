@@ -131,6 +131,12 @@ link_pht_flyer <- tags$a(
   target = "_blank"
 )
 
+link_pht_source <- tags$a(
+  shiny::icon("github"), "Source Code",
+  href = "https://github.com/KentuckyDepartmentForPublicHealth/PHT",
+  target = "_blank"
+)
+
 
 # leaflet -----------------------------------------------------------------
 # ky_counties <- DBI::dbGetQuery(con, 'select * from geo.ky_county') %>%

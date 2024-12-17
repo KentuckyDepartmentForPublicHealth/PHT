@@ -122,7 +122,8 @@ nav_panel(
     nav_item(link_ship2024),
     nav_item(link_ship2024_exec),
     # br(),
-    nav_item(link_pht_flyer)
+    nav_item(link_pht_flyer),
+    nav_item(link_pht_source),
   ),
 
 
