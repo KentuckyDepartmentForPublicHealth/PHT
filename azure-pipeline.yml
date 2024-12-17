@@ -26,10 +26,8 @@ jobs:
 
       # Step 3: Add GitHub as Remote and Push Changes
       - script: |
-          git remote add mirror https://$(GITHUB_USERNAME):$(GITHUB_PAT)@github.com/KentuckyDepartmentForPublicHealth/PHT.git
-          git fetch origin
-          git push mirror --all        # Push all branches
-          git push mirror --tags       # Push all tags
+          git push mirror
+          git push mirror
         env:
           GITHUB_USERNAME: $(GITHUB_USERNAME)
           GITHUB_PAT: $(GITHUB_PAT)
