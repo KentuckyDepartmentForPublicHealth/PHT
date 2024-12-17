@@ -79,7 +79,10 @@ realignViewOfKentucky <- function(shapefile) {
 
 # load(file = 'dat/ky_joined.RData')
 
-# resources ---------------------------------------------------------------
+
+# resourceLinks -----------------------------------------------------------
+
+
 
 
 link_khda <- tags$a(
@@ -94,31 +97,31 @@ link_naccho <- tags$a(
 )
 link_lhdmap <- tags$a(
   shiny::icon("globe"), "Kentucky Districts and Counties (PDF Map)",
-  href = "/doc/LHDdistrictsandcounties.pdf",
+  href = "doc/LHDdistrictsandcounties.pdf",
   target = "_blank"
 )
 
 link_sha2023 <- tags$a(
   shiny::icon("file-lines"), "State Health Assessment (SHA) 2023",
-  href = "/doc/StateHealthAssessment2023.pdf",
+  href = "doc/StateHealthAssessment2023.pdf",
   target = "_blank"
 )
 
 link_sha2023_exec <- tags$a(
   shiny::icon("file-lines"), "SHA Executive Summary 2023",
-  href = "/doc/SHA Executive Summary - final approved.pdf",
+  href = "doc/SHA Executive Summary - final approved.pdf",
   target = "_blank"
 )
 
 link_ship2024 <- tags$a(
   shiny::icon("file-lines"), "State Health Improvement Plan (SHIP) 2024-2028",
-  href = "/doc/SHIP2024-28.pdf",
+  href = "doc/SHIP2024-28.pdf",
   target = "_blank"
 )
 
 link_ship2024_exec <- tags$a(
   shiny::icon("file-lines"), "SHIP Executive Summary 2024-2028",
-  href = "/doc/SHIPExecutiveSummary.pdf",
+  href = "doc/SHIPExecutiveSummary.pdf",
   target = "_blank"
 )
 
