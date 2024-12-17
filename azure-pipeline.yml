@@ -11,7 +11,20 @@ variables:
 jobs:
   - job: MirrorRepo
     displayName: 'Mirror Azure DevOps Repo to GitHub'
-      
+
+    steps:
+      # Step 1: Install Git (if not already available)
+      - script: |
+          git --version
+        displayName: 'Check Git Version'
+
+      # Step 2: Configure Git User
+      - script: |
+          git config --global user.name "berrones"
+          git config --global user.email "adam.berrones@ky.gov"
+        displayName: 'Configure Git User'
+
+      # Step 3: Add GitHub as Remote and Push Changes
       - script: |
           git push mirror HEAD:main
         env:
