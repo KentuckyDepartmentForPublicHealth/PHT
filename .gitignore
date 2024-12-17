@@ -13,3 +13,5 @@ www/doc/**/*
 
 # Allow .gitkeep files to ensure directories are tracked
 !www/Listing/**/.gitkeep
+!www/doc/.gitkeep
+
