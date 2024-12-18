@@ -20,14 +20,14 @@ jobs:
 
       # Step 2: Configure Git User
       - script: |
-          git config --global user.name "berrones"
-          git config --global user.email "adam.berrones@ky.gov"
+          git config --global user.name "$(GITHUB_USERNAME)"
+          git config --global user.email "$(GITHUB_EMAIL)"
         displayName: 'Configure Git User'
 
       # Step 3: Add GitHub as Remote and Push Changes
       - script: |
           git push mirror HEAD:main
-        env:
-          GITHUB_USERNAME: $(GITHUB_USERNAME)
-          GITHUB_PAT: $(GITHUB_PAT)
-        displayName: 'Mirror Repo to GitHub'
+      env:
+        GITHUB_USERNAME: $(GITHUB_USERNAME)
+        GITHUB_PAT: $(GITHUB_PAT)
+      displayName: 'Mirror Repo to GitHub'
