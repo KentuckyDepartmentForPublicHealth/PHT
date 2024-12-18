@@ -24,12 +24,26 @@ jobs:
           git config --global user.email "$(GITHUB_EMAIL)"
         displayName: 'Configure Git User'
 
-      # Step 3: Set GitHub Remote URL with Credentials
+      # Step 3: Add GitHub Remote if Not Exists
       - script: |
-          git remote set-url mirror https://$(GITHUB_USERNAME):$(GITHUB_PAT)@github.com/KentuckyDepartmentForPublicHealth/PHT.git
+          git remote add mirror https://$(GITHUB_USERNAME):$(GITHUB_PAT)@github.com/<your-repo-name>.git || echo "Remote 'mirror' already exists"
+        env:
+          GITHUB_USERNAME: $(GITHUB_USERNAME)
+          GITHUB_PAT: $(GITHUB_PAT)
+        displayName: 'Add GitHub Remote'
+
+      # Step 4: Set GitHub Remote URL with Credentials
+      - script: |
+          git remote set-url mirror https://$(GITHUB_USERNAME):$(GITHUB_PAT)@github.com/<your-repo-name>.git
+        env:
+          GITHUB_USERNAME: $(GITHUB_USERNAME)
+          GITHUB_PAT: $(GITHUB_PAT)
         displayName: 'Set GitHub Remote URL'
 
-      # Step 4: Push Changes to GitHub
+      # Step 5: Push Changes to GitHub
       - script: |
           git push mirror HEAD:main
+        env:
+          GITHUB_USERNAME: $(GITHUB_USERNAME)
+          GITHUB_PAT: $(GITHUB_PAT)
         displayName: 'Mirror Repo to GitHub'
