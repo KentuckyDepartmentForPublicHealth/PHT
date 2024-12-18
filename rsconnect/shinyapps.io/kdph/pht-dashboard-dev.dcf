@@ -1,0 +1,10 @@
+name: pht-dashboard-dev
+title:
+username: kdph
+account: kdph
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 13613591
+bundleId: 9535674
+url: https://kdph.shinyapps.io/pht-dashboard-dev/
+version: 1
