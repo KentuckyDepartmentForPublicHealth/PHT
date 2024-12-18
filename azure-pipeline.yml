@@ -34,7 +34,7 @@ jobs:
 
       # Step 4: Set GitHub Remote URL with Credentials
       - script: |
-          git remote set-url mirror https://$(GITHUB_USERNAME):$(GITHUB_PAT)@github.com/<your-repo-name>.git
+          git remote set-url mirror https://$(GITHUB_USERNAME):$(GITHUB_PAT)@github.com/KentuckyDepartmentForPublicHealth/PHT.git
         env:
           GITHUB_USERNAME: $(GITHUB_USERNAME)
           GITHUB_PAT: $(GITHUB_PAT)
