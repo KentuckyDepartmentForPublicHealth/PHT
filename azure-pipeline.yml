@@ -6,7 +6,7 @@ pool:
   name: 'Build'
 
 variables:
-  - group: GitHubSecrets  # New variable group for GitHub credentials
+  - group: GitHubSecrets  # Variable group for GitHub credentials
 
 jobs:
   - job: MirrorRepo
@@ -24,10 +24,12 @@ jobs:
           git config --global user.email "$(GITHUB_EMAIL)"
         displayName: 'Configure Git User'
 
-      # Step 3: Add GitHub as Remote and Push Changes
+      # Step 3: Set GitHub Remote URL with Credentials
+      - script: |
+          git remote set-url mirror https://$(GITHUB_USERNAME):$(GITHUB_PAT)@github.com/KentuckyDepartmentForPublicHealth/PHT.git
+        displayName: 'Set GitHub Remote URL'
+
+      # Step 4: Push Changes to GitHub
       - script: |
           git push mirror HEAD:main
-        env:
-          GITHUB_USERNAME: $(GITHUB_USERNAME)
-          GITHUB_PAT: $(GITHUB_PAT)
         displayName: 'Mirror Repo to GitHub'
