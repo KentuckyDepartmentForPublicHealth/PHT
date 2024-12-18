@@ -26,11 +26,12 @@ jobs:
 
       # Step 3: Add GitHub Remote if Not Exists
       - script: |
-          if git remote get-url mirror 2>nul; then
-            echo "Remote 'mirror' already exists"
-          else
+          git remote get-url mirror >nul 2>nul
+          if %ERRORLEVEL% NEQ 0 (
             git remote add mirror https://$(GITHUB_USERNAME):$(GITHUB_PAT)@github.com/KentuckyDepartmentForPublicHealth/PHT.git
-          fi
+          ) else (
+            echo "Remote 'mirror' already exists"
+          )
         env:
           GITHUB_USERNAME: $(GITHUB_USERNAME)
           GITHUB_PAT: $(GITHUB_PAT)
