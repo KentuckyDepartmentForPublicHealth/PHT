@@ -103,12 +103,6 @@ nav_panel(
   )
 ),
 
-# nav_panel(
-#   title = "About", icon = icon('barcode'),
-#   h3('Directly download available files'),
-#   card_title("Same data as found within the map location markers")
-# ),
-
 # resources ---------------------------------------------------------------
   nav_menu(
     title = "Resources", icon = icon('link'),

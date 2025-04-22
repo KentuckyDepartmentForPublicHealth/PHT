@@ -2,14 +2,6 @@
 
 server <- function(input, output, session) {
 
-  # Activate thematic
-  # thematic::thematic_on(font = "auto")
-
-  # output$plot2 <- renderPlot({
-  #   mtcars |>
-  #     ggplot(aes(!!sym(input$var), !!sym(input$var2), color = factor(cyl))) 
-  # })
-  # 
   
   observe({
     # close sidebar when not in Home

@@ -2,6 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
+.Renviron
 
 # Include www/Listing and www/doc directories
 !www/Listing/
