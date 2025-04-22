@@ -240,6 +240,115 @@ server <- function(input, output, session) {
       }
     }, sanitize.text.function = function(x) x)  # Disable sanitizing to allow HTML rendering
   })  
+
+    # Contact form logic -----
+    status_type <- reactiveVal("ready")
+    status_message <- reactiveVal("Ready to submit")
+
+    output$status <- renderUI({
+      div(
+        class = "status-message",
+        style = paste0(
+          "padding: 15px; border-radius: 8px; ",
+          "border-left: 5px solid ", if (grepl("Error", status_message())) "#f44336" else "#4caf50", "; ",
+          "margin-top: 10px; box-shadow: 2px 2px 10px rgba(0,0,0,0.1);"
+        ),
+        tags$div(
+          style = "display: flex; align-items: center;",
+          tags$i(
+            class = if (grepl("Error", status_message())) "fa fa-exclamation-circle" else "fa fa-check-circle",
+            style = paste0(
+              "margin-right: 10px; font-size: 24px; color: ",
+              if (grepl("Error", status_message())) "#f44336" else "#4caf50"
+            )
+          ),
+          h3(style = "margin: 0; font-weight: 500;", status_message())
+        )
+      )
+    })
+
+    observeEvent(input$submit, {
+      if (input$name == "" || input$email == "" || input$message == "") {
+        showNotification(
+          ui = div(
+            tags$b("Error:"),
+            "Please fill in all required fields."
+          ),
+          type = "error",
+          duration = 5
+        )
+        status_type("error")
+        status_message("Error: All fields are required!")
+        return()
+      }
+
+      status_type("ready")
+      status_message("Processing submission...")
+
+      api_token <- Sys.getenv("api_token")
+      board_id <- Sys.getenv("board_id")
+      print(api_token)
+      print(board_id)
+      current_date <- format(Sys.Date(), "%Y-%m-%d")
+
+      column_values <- paste0(
+        "{",
+        '"text_mkq6vaar": "', current_date, '",',
+        '"text_mkq6awc2": "', gsub('"', '\\\\"', input$message), '",',
+        '"text_mkq6cbxg": "', input$email, '"',
+        "}"
+      )
+
+      query <- paste0("mutation {
+      create_item (
+        board_id: ", board_id, ',
+        item_name: "', input$name, '",
+        column_values: "', gsub('"', '\\\\"', column_values), '"
+      ) {
+        id
+      }
+    }')
+
+      response <- POST(
+        url = "https://api.monday.com/v2",
+        add_headers("Authorization" = api_token, "Content-Type" = "application/json"),
+        body = list(query = query),
+        encode = "json"
+      )
+
+      if (status_code(response) == 200) {
+        showNotification(
+          ui = div(
+            tags$b("Success!"),
+            "Your message has been submitted."
+          ),
+          type = "message",
+          duration = 5
+        )
+        updateTextInput(session, "message", value = "")
+        updateTextInput(session, "name", value = "")
+        updateTextInput(session, "email", value = "")
+        status_type("success")
+        status_message("Successfully submitted!")
+      } else {
+        showNotification(
+          ui = div(
+            tags$b("Error!"),
+            paste("Status code:", status_code(response))
+          ),
+          type = "error",
+          duration = 5
+        )
+        status_type("error")
+        status_message(paste("Error submitting. Status code:", status_code(response)))
+      }
+    })
+
+    observeEvent(input$clear_form, {
+      updateTextInput(session, "message", value = "")
+      updateTextInput(session, "name", value = "")
+      updateTextInput(session, "email", value = "")
+    })
   
 
 } # end Server

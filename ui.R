@@ -120,6 +120,43 @@ nav_panel(
     nav_item(link_pht_source),
   ),
 
+  # contact ---------------------------------------------------------------
+  nav_panel(
+  title = "Contact", icon = icon("envelope"),
+  fluidPage(
+    fluidRow(
+      column(
+        8,
+        wellPanel(
+          h3("Enter Your Information"),
+          textInput("name", "Name:", ""),
+          textInput("email", "Email:", ""),
+          textAreaInput("message", "Message:", "",
+                        rows = 6,
+                        resize = "vertical",
+                        width = "100%"),
+          div(
+            style = "display: flex; justify-content: space-between; margin-top: 15px;",
+            actionButton("submit", "Submit",
+                         class = "btn-primary",
+                         icon = icon("right-to-bracket")),
+            actionButton("clear_form", "Clear",
+                         class = "btn-warning",
+                         icon = icon("eraser"))
+          )
+        )
+      ),
+      column(
+        4,
+        wellPanel(
+          h3("Submission Status:"),
+          uiOutput("status")
+        )
+      )
+    )
+  )
+),
+
 
 
 # mode toggle -------------------------------------------------------------

@@ -19,7 +19,7 @@ library(leaflet.extras)
 library(fresh)
 library(shinycssloaders)
 library(bsicons)
-
+library(httr)
 # colors ------------------------------------------------------------------
 
 chfs <- list(

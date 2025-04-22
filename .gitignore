@@ -16,3 +16,5 @@ www/doc/**/*
 !www/Listing/**/.gitkeep
 !www/doc/.gitkeep
 
+rsconnect/
+*.dcf
