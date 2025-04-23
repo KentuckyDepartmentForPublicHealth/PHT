@@ -1,4 +1,4 @@
-
+options(rsconnect.max.bundle.size = 4000000000) # Set to 4 GB
 
 # libs --------------------------------------------------------------------
 
@@ -20,6 +20,7 @@ library(fresh)
 library(shinycssloaders)
 library(bsicons)
 library(httr)
+library(jsonlite)
 # colors ------------------------------------------------------------------
 
 chfs <- list(
