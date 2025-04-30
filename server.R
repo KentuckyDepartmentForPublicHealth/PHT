@@ -1,305 +1,370 @@
-
-
 server <- function(input, output, session) {
-
-  
   observe({
     # close sidebar when not in Home
-    if (!input$navBar %in% 'Home') {
-    sidebar_toggle(
-      id = "mySidebar",
-      open = F
-    )
+    if (!input$navBar %in% "Home") {
+      sidebar_toggle(
+        id = "mySidebar",
+        open = F
+      )
     } else {
-    sidebar_toggle(
-      id = "mySidebar",
-      open = T
-    )
+      sidebar_toggle(
+        id = "mySidebar",
+        open = T
+      )
     }
   })
-  
 
-# valuebox ----------------------------------------------------------------
 
-  
-  
+  # valuebox ----------------------------------------------------------------
+
+
+
   output$my_value_box <- renderUI({
     layout_columns(
-    value_box(
-      title = "% of 61 Local Health Departments (county, district, and independent) who've submitted a Local Needs Assessment", 
-      value = paste0(sprintf('%0.0f', prop.table(table(shapefile$Status) )[[2]] * 100 ), '%'),
-      theme = value_box_theme(
-        bg = if (input$mode_toggle %in% 'dark') chfs$cols9[2] else chfs$cols9[9],
-        fg = if (input$mode_toggle %in% 'dark') 'white' else chfs$cols9[2]
+      value_box(
+        title = "% of 61 Local Health Departments (county, district, and independent) who've submitted a Local Needs Assessment",
+        value = paste0(sprintf("%0.0f", prop.table(table(shapefile$Status))[[2]] * 100), "%"),
+        theme = value_box_theme(
+          bg = if (input$mode_toggle %in% "dark") chfs$cols9[2] else chfs$cols9[9],
+          fg = if (input$mode_toggle %in% "dark") "white" else chfs$cols9[2]
+        ),
+        showcase = icon("calendar-check"),
+        showcase_layout = "top right", full_screen = T, fill = T,
+        height = NULL # Set height of the value box
       ),
-      showcase = icon('calendar-check'),
-      showcase_layout = "top right", full_screen = T, fill = T,
-      height = NULL     # Set height of the value box
-    ),
-    value_box(
-      title = "Number of downloadable files available in this site (some LHDs submitted more than 1 document)",
-      value = numberOfListings,
-      theme = value_box_theme(
-        bg = if (input$mode_toggle %in% 'dark') chfs$cols9[2] else chfs$cols9[9],
-        fg = if (input$mode_toggle %in% 'dark') 'white' else chfs$cols9[2]
-      ),
-      showcase = icon('hashtag'),
-      showcase_layout = "top right", full_screen = T, fill = T,
-      height = NULL      # Set height of the value box
-    )
-    # value_box(
-    #   title = "Top Health Priorities",
-    #   value = HTML("<ol>
-    #   <li>Substance Abuse</li>
-    #   <li>Physical Health</li>
-    #   <li>Mental Health</li>
-    #   <li>Access To Care</li>
-    #   <li>Tobacco</li>
-    #   <li>Cancer</li>
-    #   <li>Diabetes</li>
-    #   <li>Food Security/Access</li>
-    #   <li>Cardiovascular Disease</li>
-    #   <li>Housing</li>
-    #   </ol>"),
-    #   theme = value_box_theme(
-    #     bg = if (input$mode_toggle %in% 'dark') chfs$cols9[2] else chfs$cols9[9],
-    #     fg = if (input$mode_toggle %in% 'dark') 'white' else chfs$cols9[2]
-    #   ),
-    #   showcase = icon('calendar-check'),
-    #   showcase_layout = "top right", full_screen = T, fill = T,
-    #   height = NULL      # Set height of the value box
-    # )
+      value_box(
+        title = "Number of downloadable files available in this site (some LHDs submitted more than 1 document)",
+        value = numberOfListings,
+        theme = value_box_theme(
+          bg = if (input$mode_toggle %in% "dark") chfs$cols9[2] else chfs$cols9[9],
+          fg = if (input$mode_toggle %in% "dark") "white" else chfs$cols9[2]
+        ),
+        showcase = icon("hashtag"),
+        showcase_layout = "top right", full_screen = T, fill = T,
+        height = NULL # Set height of the value box
+      )
+      # value_box(
+      #   title = "Top Health Priorities",
+      #   value = HTML("<ol>
+      #   <li>Substance Abuse</li>
+      #   <li>Physical Health</li>
+      #   <li>Mental Health</li>
+      #   <li>Access To Care</li>
+      #   <li>Tobacco</li>
+      #   <li>Cancer</li>
+      #   <li>Diabetes</li>
+      #   <li>Food Security/Access</li>
+      #   <li>Cardiovascular Disease</li>
+      #   <li>Housing</li>
+      #   </ol>"),
+      #   theme = value_box_theme(
+      #     bg = if (input$mode_toggle %in% 'dark') chfs$cols9[2] else chfs$cols9[9],
+      #     fg = if (input$mode_toggle %in% 'dark') 'white' else chfs$cols9[2]
+      #   ),
+      #   showcase = icon('calendar-check'),
+      #   showcase_layout = "top right", full_screen = T, fill = T,
+      #   height = NULL      # Set height of the value box
+      # )
     )
   })
-  # 
+  #
   # Use leafletProxy() to update the map on reset instead of re-rendering it
   observeEvent(input$resetMap, {
-    updateRadioButtons(session, 'labelthemap', selected = '12px')
-    update_switch('showmarkers', value = TRUE)
-    update_switch('showpopup', value = TRUE)
-    updateSelectInput(session, 'whichcounty', selected = 'All')
-    
-    leafletProxy("map") %>% 
-      realignViewOfKentucky()
-  #   output$map <- renderLeaflet({
-  #     mapPrecursor()  
-  # })
-  })
-  
-  
+    updateRadioButtons(session, "labelthemap", selected = "12px")
+    update_switch("showmarkers", value = TRUE)
+    update_switch("showpopup", value = TRUE)
+    updateSelectInput(session, "whichcounty", selected = "All")
+    updateSelectInput(session, "whichqpal", selected = "Status")
 
-  
+    leafletProxy("map") %>%
+      realignViewOfKentucky()
+    #   output$map <- renderLeaflet({
+    #     mapPrecursor()
+    # })
+  })
+
+  # Use observeEvent to update the map when specific inputs change
+  # observeEvent(list(input$whichqpal, input$mode_toggle, shapefileReactive()), {
+  #   # Use leafletProxy to update only the polygons with new colors
+  #   leafletProxy("map") %>%
+  #     clearShapes() %>%
+  #     addPolygons(
+  #       data = shapefileReactive(),
+  #       fillColor = ~qpal()(chosen_qpal_var()),
+  #       fillOpacity = 1,
+  #       weight = 2
+  #     )
+  # })
+
+
   # observeEvent(shapefileReactive(), {
   #   leafletProxy("map", data = shapefileReactive())
   # })
-  # 
+  #
   observeEvent(input$resetdownloads, {
     # Reset the selected input (e.g., set 'bydirectory' back to 'Allen County')
-    updateSelectInput(session, 'bydirectory', selected = 'Allen County')
-    
+    updateSelectInput(session, "bydirectory", selected = "Allen County")
+
     # Clear the table by rendering a message or setting it to NULL
     output$file_table <- renderTable({
       data.frame(NULL)
     })
   })
-  
 
-# qpal --------------------------------------------------------------------
+
+  # qpal --------------------------------------------------------------------
+  chosen_qpal_var <- reactive({
+    if (input$whichqpal == "Status") {
+      shapefile$Status
+    } else if (input$whichqpal == "Status2") {
+      shapefile$Status2
+    } else if (input$whichqpal == "colored2") {
+      shapefile$colored2
+    }
+  })
+
+
 
   qpal <- reactive({
-  if (input$mode_toggle %in% 'dark') {
-    
-  # dark  
-  colorFactor(palette = c(chfs$cols9[2], chfs$cols9[7]), domain = shapefile$Status)
-  } else {  
-  
-  # light
-  colorFactor(palette = c(chfs$cols9[9], chfs$cols9[1]), domain = shapefile$Status)
-  }
-  })
-  
-  shapefileReactive <- eventReactive(input$whichcounty, {
-    if (!input$whichcounty %in% 'All') {
-      shapefile %>%
-        mutate(whichrow = row_number()) %>% 
-        # dplyr::filter(grepl(input$whichcounty, Listing))
-        # dplyr::filter(str_detect(Listing, fixed(input$whichcounty, ignore_case = TRUE)))
-        dplyr::filter(str_detect(Listing, paste0("(^|\\s)", input$whichcounty, "(\\s|$)")))
+    if (input$mode_toggle %in% "dark") {
+      # dark
+      colorFactor(palette = c(chfs$cols9[2], chfs$cols9[7]), domain = chosen_qpal_var())
     } else {
-      shapefile 
+      # light
+      colorFactor(palette = c(chfs$cols9[9], chfs$cols9[1]), domain = chosen_qpal_var())
     }
-  }, ignoreInit = F)
-  
-# leaflet -----------------------------------------------------------------
+  })
+
+
+  shapefileReactive <- eventReactive(
+    c(input$whichcounty, input$whichqpal),
+    {
+      if (!input$whichcounty %in% "All") {
+        shapefile %>%
+          mutate(whichrow = row_number()) %>%
+          # dplyr::filter(grepl(input$whichcounty, Listing))
+          # dplyr::filter(str_detect(Listing, fixed(input$whichcounty, ignore_case = TRUE)))
+          dplyr::filter(str_detect(Listing, paste0("(^|\\s)", input$whichcounty, "(\\s|$)")))
+      } else {
+        shapefile
+      }
+    },
+    ignoreInit = F
+  )
+
+  # leaflet -----------------------------------------------------------------
   mapPrecursor <- reactive({
-    
-    leaflet(shapefileReactive()) %>% 
+    leaflet(shapefileReactive()) %>%
       addPolygons(,
-        fillColor = ~qpal()(Status),
+        fillColor = ~ qpal()(chosen_qpal_var()),
         fillOpacity = 1,
         color = 'white',
         weight = 2,
-        label = if (!input$showpopup) {NULL} else {
-          sprintf("%s",
-           paste('<span style="font-size: 1.5em">',
-                 # "<b>Geography: </b>", shapefile$NAME10, '<br>',
-                 '<b>LHD: </b>', shapefileReactive()$NAME10, '<br>',
-                 '<b>Counties: </b>',shapefileReactive()$Listing, '<br>',
-                 # "<b>Variable: </b>", a('link', href = 'kde.org', target='_blank'), '<br>',
-                 "<b>LNA Submitted? </b>", shapefileReactive()$Status, '</span>'
-           )
-        ) %>%
-            lapply(htmltools::HTML)}
-      ) %>% 
-      addControl(paste('902 KAR 8:160 Local health department operations requirements',br(), br(), 'Section 10: Identification of Local Needs'), position = 'topright') %>%
+        label = if (!input$showpopup) {
+          NULL
+        } else {
+          sprintf(
+            "%s",
+            paste(
+              '<span style="font-size: 1.5em">',
+              # "<b>Geography: </b>", shapefile$NAME10, '<br>',
+              "<b>LHD: </b>", shapefileReactive()$NAME10, "<br>",
+              "<b>Counties: </b>", shapefileReactive()$Listing, "<br>",
+              # "<b>Variable: </b>", a('link', href = 'kde.org', target='_blank'), '<br>',
+              "<b>LNA Submitted? </b>", shapefileReactive()$Status, "</span>"
+            )
+          ) %>%
+            lapply(htmltools::HTML)
+        }
+      ) %>%
+      addControl(paste("902 KAR 8:160 Local health department operations requirements", br(), br(), "Section 10: Identification of Local Needs"), position = "topright") %>%
       addLegend(title = HTML(paste0("<span style='color: #0C3151; font-size: 1.2em;'>", 'LNA Submitted?',"</span>")),
                 position = 'topright',
-                values = ~Status, # change here
+                values = ~chosen_qpal_var(), # change here
                 pal =  qpal(), # app WORKS
                 # pal =  isolate(qpal()), # app WORKS
                 # pal = qpal, # interactive
                 opacity = 1
       ) %>%
-      {if (!input$showmarkers) {.} else {
-        addMarkers(.,
-                   lng = ~ as.numeric(unlist(INTPTLON10)),
-                   lat = ~ as.numeric(unlist(INTPTLAT10)),
-                   popup = ~{
-                     lapply(1:nrow(shapefileReactive()), function(i) {
-                       marker_files <- nested_data_flat %>%
-                         filter(NAME %in% shapefileReactive()$NAMELSAD10[i])
+      {
+        if (!input$showmarkers) {
+          .
+        } else {
+          addMarkers(.,
+            lng = ~ as.numeric(unlist(INTPTLON10)),
+            lat = ~ as.numeric(unlist(INTPTLAT10)),
+            popup = ~ {
+              lapply(1:nrow(shapefileReactive()), function(i) {
+                marker_files <- nested_data_flat %>%
+                  filter(NAME %in% shapefileReactive()$NAMELSAD10[i])
 
-                       if (nrow(marker_files) == 0 || all(is.na(marker_files$files))) {
-                         "No files available"
-                       } else {
-                         paste0("<ul class='mapfilebullet'>",
-                                paste0("<li><a href='", marker_files$files,
-                                       "' target='_blank'>",
-                                       basename(marker_files$files),
-                                       "</a></li>", collapse = ""),
-                                "</ul>")
-                       }
-                     })
-                   })
-      }} %>%
-      # addMarkers(lng = centroid_coords[, 1], lat = centroid_coords[, 2]) %>%
-      {if (input$labelthemap %in% 'nolabels') {.} else {addLabelOnlyMarkers(.,
-        lng = ~ as.numeric(unlist(INTPTLON10)), lat = ~ as.numeric(unlist(INTPTLAT10)),
-        label = ~ NAMELSAD10,
-        icon = NULL,
-        labelOptions = labelOptions(
-          noHide = TRUE,
-          sticky=F,
-          textsize = input$labelthemap,
-          textOnly = T,
-          style = if (input$mode_toggle %in% 'light') {
-            list(
-              "color" =  "black",
-                'text-shadow' = '0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff'
-            ) }
-          else {
-           list(
-              "color" = "white",
-                'text-shadow' = '0 0 10px #95D3F5, 0 0 10px #95D3F5, 0 0 10px #95D3F5'
+                if (nrow(marker_files) == 0 || all(is.na(marker_files$files))) {
+                  "No files available"
+                } else {
+                  paste0(
+                    "<ul class='mapfilebullet'>",
+                    paste0("<li><a href='", marker_files$files,
+                      "' target='_blank'>",
+                      basename(marker_files$files),
+                      "</a></li>",
+                      collapse = ""
+                    ),
+                    "</ul>"
+                  )
+                }
+              })
+            }
           )
-      }
-      ))}} %>%
-      leaflet.extras::setMapWidgetStyle(., if (input$mode_toggle %in% 'light') list(background = '#ddd') else list(background = 'black')) %>% 
+        }
+      } %>%
+      # addMarkers(lng = centroid_coords[, 1], lat = centroid_coords[, 2]) %>%
+      {
+        if (input$labelthemap %in% "nolabels") {
+          .
+        } else {
+          addLabelOnlyMarkers(.,
+            lng = ~ as.numeric(unlist(INTPTLON10)), lat = ~ as.numeric(unlist(INTPTLAT10)),
+            label = ~NAMELSAD10,
+            icon = NULL,
+            labelOptions = labelOptions(
+              noHide = TRUE,
+              sticky = F,
+              textsize = input$labelthemap,
+              textOnly = T,
+              style = if (input$mode_toggle %in% "light") {
+                list(
+                  "color" = "black",
+                  "text-shadow" = "0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff"
+                )
+              } else {
+                list(
+                  "color" = "white",
+                  "text-shadow" = "0 0 10px #95D3F5, 0 0 10px #95D3F5, 0 0 10px #95D3F5"
+                )
+              }
+            )
+          )
+        }
+      } %>%
+      leaflet.extras::setMapWidgetStyle(., if (input$mode_toggle %in% "light") list(background = "#ddd") else list(background = "black")) %>%
       # {if (input$whichcounty %in% 'All') { realignViewOfKentucky(.) } else {setView(., lng = as.numeric(unlist(shapefileReactive()$INTPTLON10)), lat = as.numeric(unlist(shapefileReactive()$INTPTLAT10)), zoom = 9)}}
-      {if (input$whichcounty %in% 'All') { realignViewOfKentucky(.) } else {setView(., lng = centroid_coords[, 1][[shapefileReactive()$whichrow]], lat = centroid_coords[, 2][[shapefileReactive()$whichrow]], zoom = 10)}}
+      {
+        if (input$whichcounty %in% "All") {
+          realignViewOfKentucky(.)
+        } else {
+          setView(., lng = centroid_coords[, 1][[shapefileReactive()$whichrow]], lat = centroid_coords[, 2][[shapefileReactive()$whichrow]], zoom = 10)
+        }
+      }
   })
-  
-  observeEvent(T, {
-    output$map <- renderLeaflet({
-      mapPrecursor()   
-    })
-  }, once = T)
-  
-  
-## Downloads panel
+
+  observeEvent(T,
+    {
+      output$map <- renderLeaflet({
+        mapPrecursor()
+      })
+    },
+    once = T
+  )
+
+  # MIGHT BE NEEDED Use observeEvent to update the map when specific inputs change
+  # observeEvent(list(input$whichqpal, input$mode_toggle, shapefileReactive()), {
+  #   # Use leafletProxy to update only the polygons with new colors
+  #   leafletProxy("map") %>%
+  #     clearShapes() %>%
+  #     addPolygons(
+  #       data = shapefileReactive(),
+  #       fillColor = ~qpal()(chosen_qpal_var()),
+  #       fillOpacity = 1,
+  #       weight = 2
+  #     )
+  # })
+
+  ## Downloads panel
   # Render the table with downloadable links
   observeEvent(input$searchdownloads, {
-    
     selected_files <- reactive({
       nested_data2 %>%
         filter(NAME %in% isolate(input$bydirectory)) %>%
-        unnest(files)  # Unnest the files for the selected directory
+        unnest(files) # Unnest the files for the selected directory
     })
-    
-    output$file_table <- renderTable({
-      # Check if selected_files() is empty
-      if (nrow(selected_files()) == 0) {
-        # Return a data frame with the "No files available" message
-        tibble("Downloadable Files" = paste("No files available for", isolate(input$bydirectory)))
-      } else {
-        # If there are files, generate the download links
-        selected_files() %>%
-          mutate(download_link = paste0("<a href='", files, "' download>", basename(files), "</a>")) %>%
-          select(download_link) %>%
-          rename("Downloadable Files" = download_link)  # Display as clickable links
-      }
-    }, sanitize.text.function = function(x) x)  # Disable sanitizing to allow HTML rendering
-  })  
 
-    # Contact form logic -----
-    status_type <- reactiveVal("ready")
-    status_message <- reactiveVal("Ready to submit")
+    output$file_table <- renderTable(
+      {
+        # Check if selected_files() is empty
+        if (nrow(selected_files()) == 0) {
+          # Return a data frame with the "No files available" message
+          tibble("Downloadable Files" = paste("No files available for", isolate(input$bydirectory)))
+        } else {
+          # If there are files, generate the download links
+          selected_files() %>%
+            mutate(download_link = paste0("<a href='", files, "' download>", basename(files), "</a>")) %>%
+            select(download_link) %>%
+            rename("Downloadable Files" = download_link) # Display as clickable links
+        }
+      },
+      sanitize.text.function = function(x) x
+    ) # Disable sanitizing to allow HTML rendering
+  })
 
-    output$status <- renderUI({
-      div(
-        class = "status-message",
-        style = paste0(
-          "padding: 15px; border-radius: 8px; ",
-          "border-left: 5px solid ", if (grepl("Error", status_message())) "#f44336" else "#4caf50", "; ",
-          "margin-top: 10px; box-shadow: 2px 2px 10px rgba(0,0,0,0.1);"
+  # Contact form logic -----
+  status_type <- reactiveVal("ready")
+  status_message <- reactiveVal("Ready to submit")
+
+  output$status <- renderUI({
+    div(
+      class = "status-message",
+      style = paste0(
+        "padding: 15px; border-radius: 8px; ",
+        "border-left: 5px solid ", if (grepl("Error", status_message())) "#f44336" else "#4caf50", "; ",
+        "margin-top: 10px; box-shadow: 2px 2px 10px rgba(0,0,0,0.1);"
+      ),
+      tags$div(
+        style = "display: flex; align-items: center;",
+        tags$i(
+          class = if (grepl("Error", status_message())) "fa fa-exclamation-circle" else "fa fa-check-circle",
+          style = paste0(
+            "margin-right: 10px; font-size: 24px; color: ",
+            if (grepl("Error", status_message())) "#f44336" else "#4caf50"
+          )
         ),
-        tags$div(
-          style = "display: flex; align-items: center;",
-          tags$i(
-            class = if (grepl("Error", status_message())) "fa fa-exclamation-circle" else "fa fa-check-circle",
-            style = paste0(
-              "margin-right: 10px; font-size: 24px; color: ",
-              if (grepl("Error", status_message())) "#f44336" else "#4caf50"
-            )
-          ),
-          h3(style = "margin: 0; font-weight: 500;", status_message())
-        )
+        h3(style = "margin: 0; font-weight: 500;", status_message())
       )
-    })
+    )
+  })
 
-    observeEvent(input$submit, {
-      if (input$name == "" || input$email == "" || input$message == "") {
-        showNotification(
-          ui = div(
-            tags$b("Error:"),
-            "Please fill in all required fields."
-          ),
-          type = "error",
-          duration = 5
-        )
-        status_type("error")
-        status_message("Error: All fields are required!")
-        return()
-      }
-
-      status_type("ready")
-      status_message("Processing submission...")
-
-      api_token <- Sys.getenv("api_token")
-      board_id <- Sys.getenv("board_id")
-      print(api_token)
-      print(board_id)
-      current_date <- format(Sys.Date(), "%Y-%m-%d")
-
-      column_values <- paste0(
-        "{",
-        '"text_mkq6vaar": "', current_date, '",',
-        '"text_mkq6awc2": "', gsub('"', '\\\\"', input$message), '",',
-        '"text_mkq6cbxg": "', input$email, '"',
-        "}"
+  observeEvent(input$submit, {
+    if (input$name == "" || input$email == "" || input$message == "") {
+      showNotification(
+        ui = div(
+          tags$b("Error:"),
+          "Please fill in all required fields."
+        ),
+        type = "error",
+        duration = 5
       )
+      status_type("error")
+      status_message("Error: All fields are required!")
+      return()
+    }
 
-      query <- paste0("mutation {
+    status_type("ready")
+    status_message("Processing submission...")
+
+    api_token <- Sys.getenv("api_token")
+    board_id <- Sys.getenv("board_id")
+    print(api_token)
+    print(board_id)
+    current_date <- format(Sys.Date(), "%Y-%m-%d")
+
+    column_values <- paste0(
+      "{",
+      '"text_mkq6vaar": "', current_date, '",',
+      '"text_mkq6awc2": "', gsub('"', '\\\\"', input$message), '",',
+      '"text_mkq6cbxg": "', input$email, '"',
+      "}"
+    )
+
+    query <- paste0("mutation {
       create_item (
         board_id: ", board_id, ',
         item_name: "', input$name, '",
@@ -309,46 +374,44 @@ server <- function(input, output, session) {
       }
     }')
 
-      response <- POST(
-        url = "https://api.monday.com/v2",
-        add_headers("Authorization" = api_token, "Content-Type" = "application/json"),
-        body = list(query = query),
-        encode = "json"
+    response <- POST(
+      url = "https://api.monday.com/v2",
+      add_headers("Authorization" = api_token, "Content-Type" = "application/json"),
+      body = list(query = query),
+      encode = "json"
+    )
+
+    if (status_code(response) == 200) {
+      showNotification(
+        ui = div(
+          tags$b("Success!"),
+          "Your message has been submitted."
+        ),
+        type = "message",
+        duration = 5
       )
-
-      if (status_code(response) == 200) {
-        showNotification(
-          ui = div(
-            tags$b("Success!"),
-            "Your message has been submitted."
-          ),
-          type = "message",
-          duration = 5
-        )
-        updateTextInput(session, "message", value = "")
-        updateTextInput(session, "name", value = "")
-        updateTextInput(session, "email", value = "")
-        status_type("success")
-        status_message("Successfully submitted!")
-      } else {
-        showNotification(
-          ui = div(
-            tags$b("Error!"),
-            paste("Status code:", status_code(response))
-          ),
-          type = "error",
-          duration = 5
-        )
-        status_type("error")
-        status_message(paste("Error submitting. Status code:", status_code(response)))
-      }
-    })
-
-    observeEvent(input$clear_form, {
       updateTextInput(session, "message", value = "")
       updateTextInput(session, "name", value = "")
       updateTextInput(session, "email", value = "")
-    })
-  
+      status_type("success")
+      status_message("Successfully submitted!")
+    } else {
+      showNotification(
+        ui = div(
+          tags$b("Error!"),
+          paste("Status code:", status_code(response))
+        ),
+        type = "error",
+        duration = 5
+      )
+      status_type("error")
+      status_message(paste("Error submitting. Status code:", status_code(response)))
+    }
+  })
 
+  observeEvent(input$clear_form, {
+    updateTextInput(session, "message", value = "")
+    updateTextInput(session, "name", value = "")
+    updateTextInput(session, "email", value = "")
+  })
 } # end Server

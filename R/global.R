@@ -151,6 +151,19 @@ load(file = 'dat/select2cols.RData') # add Listing
 # shapefile <- merge(shapefile, select2cols, by = 'FID')
 # save(shapefile, file = 'dat/shapefile.RData')
 load(file = 'dat/shapefile.RData')
+
+# test qpal dynamic inputs
+# valuesforcolor <- sample(c("Yes", "No", "Yes", "Yes", "Yes", "Yes"), 61, replace = T)
+# save(valuesforcolor, file = 'dat/valuesforcolor.RData')
+load(file = 'dat/valuesforcolor.RData')
+# print(valuesforcolor)
+shapefile$colored1 <- valuesforcolor
+shapefile$colored2 <- valuesforcolor
+# print(shapefile$colored1)
+shapefile$Status2 <- shapefile$Status
+
+
+
 # centroids <- st_centroid(shapefile)
 # centroid_coords <- st_coordinates(centroids)
 # saveRDS(centroid_coords, 'dat/centroid_coords.rds')
