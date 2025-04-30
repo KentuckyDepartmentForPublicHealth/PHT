@@ -307,9 +307,10 @@ server <- function(input, output, session) {
   })
 
   # Contact form logic -----
+  
   status_type <- reactiveVal("ready")
   status_message <- reactiveVal("Ready to submit")
-
+  
   output$status <- renderUI({
     div(
       class = "status-message",
@@ -331,8 +332,9 @@ server <- function(input, output, session) {
       )
     )
   })
-
+  
   observeEvent(input$submit, {
+    # Validate inputs
     if (input$name == "" || input$email == "" || input$message == "") {
       showNotification(
         ui = div(
@@ -346,46 +348,117 @@ server <- function(input, output, session) {
       status_message("Error: All fields are required!")
       return()
     }
-
+    
+    # Validate name for safe characters
+    if (!grepl("^[A-Za-z0-9 ]+$", input$name)) {
+      showNotification(
+        ui = div(
+          tags$b("Error:"),
+          "Name contains invalid characters."
+        ),
+        type = "error",
+        duration = 5
+      )
+      status_type("error")
+      status_message("Error: Invalid characters in name!")
+      return()
+    }
+    
+    # Validate message isn't empty or only whitespace
+    if (nchar(trimws(input$message)) == 0) {
+      showNotification(
+        ui = div(
+          tags$b("Error:"),
+          "Message cannot be empty or only whitespace."
+        ),
+        type = "error",
+        duration = 5
+      )
+      status_type("error")
+      status_message("Error: Message cannot be empty!")
+      return()
+    }
+    
     status_type("ready")
     status_message("Processing submission...")
-
+    
     api_token <- Sys.getenv("api_token")
     board_id <- Sys.getenv("board_id")
-    print(api_token)
-    print(board_id)
+    
+    # Log board_id for debugging
+    cat("Board ID:", board_id, "\n")
+    
     current_date <- format(Sys.Date(), "%Y-%m-%d")
-
+    
+    # Escape input$message for JSON and GraphQL
+    escaped_message <- gsub('(["\\])', "\\\\\\1", input$message) # Escape quotes and backslashes
+    escaped_message <- gsub("\n", "\\n", escaped_message) # Explicitly escape newlines
+    escaped_message <- gsub("\t", "\\t", escaped_message) # Explicitly escape tabs
+    cat("Escaped message:", escaped_message, "\n")
+    
     column_values <- paste0(
       "{",
       '"text_mkq6vaar": "', current_date, '",',
-      '"text_mkq6awc2": "', gsub('"', '\\\\"', input$message), '",',
+      '"text_mkq6awc2": "', escaped_message, '",',
       '"text_mkq6cbxg": "', input$email, '"',
       "}"
     )
-
+    
+    # Log column_values for debugging
+    cat("Column values:", column_values, "\n")
+    
     query <- paste0("mutation {
-      create_item (
-        board_id: ", board_id, ',
-        item_name: "', input$name, '",
-        column_values: "', gsub('"', '\\\\"', column_values), '"
-      ) {
-        id
+    create_item (
+      board_id: ", board_id, ',
+      item_name: "', input$name, '",
+      column_values: "', gsub('"', '\\\\"', column_values), '"
+    ) {
+      id
+    }
+  }')
+    
+    # Log query for debugging
+    cat("Query:", query, "\n")
+    
+    # Send API request with error handling
+    response <- tryCatch(
+      {
+        POST(
+          url = "https://api.monday.com/v2",
+          add_headers("Authorization" = api_token, "Content-Type" = "application/json"),
+          body = list(query = query),
+          encode = "json"
+        )
+      },
+      error = function(e) {
+        showNotification(
+          ui = div(
+            tags$b("Error:"),
+            "Network issue connecting to Monday.com"
+          ),
+          type = "error",
+          duration = 5
+        )
+        status_type("error")
+        status_message("Error: Network issue connecting to Monday.com")
+        return(NULL)
       }
-    }')
-
-    response <- POST(
-      url = "https://api.monday.com/v2",
-      add_headers("Authorization" = api_token, "Content-Type" = "application/json"),
-      body = list(query = query),
-      encode = "json"
     )
-
-    if (status_code(response) == 200) {
+    
+    if (is.null(response)) {
+      return()
+    }
+    
+    # Parse response
+    response_body <- content(response, "parsed")
+    cat("Response:", toJSON(response_body, pretty = TRUE), "\n")
+    
+    if (status_code(response) == 200 && !is.null(response_body$data$create_item$id)) {
+      item_id <- response_body$data$create_item$id
       showNotification(
         ui = div(
           tags$b("Success!"),
-          "Your message has been submitted."
+          paste("Your message has been submitted. Item ID:", item_id)
         ),
         type = "message",
         duration = 5
@@ -394,24 +467,27 @@ server <- function(input, output, session) {
       updateTextInput(session, "name", value = "")
       updateTextInput(session, "email", value = "")
       status_type("success")
-      status_message("Successfully submitted!")
+      status_message(paste("Successfully submitted! Item ID:", item_id))
     } else {
+      error_msg <- if (!is.null(response_body$errors)) toJSON(response_body$errors, pretty = TRUE) else "Unknown error"
       showNotification(
         ui = div(
           tags$b("Error!"),
-          paste("Status code:", status_code(response))
+          paste("Status code:", status_code(response), "Details:", error_msg)
         ),
         type = "error",
         duration = 5
       )
       status_type("error")
-      status_message(paste("Error submitting. Status code:", status_code(response)))
+      status_message(paste("Error submitting. Status code:", status_code(response), "Details:", error_msg))
     }
   })
+  
+    observeEvent(input$clear_form, {
+      updateTextInput(session, "message", value = "")
+      updateTextInput(session, "name", value = "")
+      updateTextInput(session, "email", value = "")
+    })
+  
 
-  observeEvent(input$clear_form, {
-    updateTextInput(session, "message", value = "")
-    updateTextInput(session, "name", value = "")
-    updateTextInput(session, "email", value = "")
-  })
 } # end Server
