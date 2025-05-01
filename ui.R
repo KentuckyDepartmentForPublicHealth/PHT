@@ -55,14 +55,14 @@ footer = NULL,
 
 # map ---------------------------------------------------------------------
         h4(span(icon('map'), 'Interactive Map Explorer', style = paste0('color:', chfs$cols9[1]))),
-        span("Click location markers for downloadable information", style = 'text-align: left;'),
-       span(paste('Last updated:', currentDate), style = 'font-size: .75em; text-align: right;'),
+        # span("Click location markers for downloads", style = 'text-align: left;'),
         # p('Zoom in ( + )'),
         # p('Zoom out (', HTML('&ndash;'), ')'),
         div(
           class = "leaflet-wrapper",  # Wrapping in a div for additional control
           withSpinner(leafletOutput('map', height = '850px'), type = 3, color.background = 'black', color = chfs$cols9[1])  # Setting explicit height
-        )
+        ),
+       span(paste('Last updated:', currentDate), style = 'font-size: .75em; text-align: left;'), br()
 
       # nav_panel(
       #   shiny::icon("circle-info"),

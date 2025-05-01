@@ -189,6 +189,11 @@ chosen_qpal_var <- reactive({
         }
       ) %>%
       addControl(paste("902 KAR 8:160 Local health department operations requirements", br(), br(), "Section 10: Identification of Local Needs"), position = "topright") %>%
+          # Add this new control as a caption
+    addControl(
+      HTML("<div style='background-color: white; color: #0C3151; font-family: \"Helvetica Neue\", Arial, sans-serif; padding: 6px 8px; border-radius: 4px; box-shadow: 0 1px 5px rgba(0,0,0,0.4); font-size: 14px;'><i class='fa fa-map-marker'></i> Click location markers for downloads</div>"),
+      position = "topleft"
+    ) %>%
       addLegend(
           title = HTML(paste0("<span style='color: #0C3151; font-size: 1.2em;'>", 
                      names(which(color_map_choices == input$whichqpal)), 
