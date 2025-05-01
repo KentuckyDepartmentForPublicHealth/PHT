@@ -1,4 +1,4 @@
-
+options(rsconnect.max.bundle.size = 4000000000) # Set to 4 GB
 
 # libs --------------------------------------------------------------------
 
@@ -20,6 +20,7 @@ library(fresh)
 library(shinycssloaders)
 library(bsicons)
 library(httr)
+library(jsonlite)
 # colors ------------------------------------------------------------------
 
 chfs <- list(
@@ -150,17 +151,17 @@ load(file = 'dat/select2cols.RData') # add Listing
 # shapefile <- st_transform(shapefile, crs = 4326)
 # shapefile <- merge(shapefile, select2cols, by = 'FID')
 # save(shapefile, file = 'dat/shapefile.RData')
-load(file = 'dat/shapefile.RData')
-
+load(file = 'dat/shapefile2025.RData')
+shapefile <- shapefile2025
 # test qpal dynamic inputs
 # valuesforcolor <- sample(c("Yes", "No", "Yes", "Yes", "Yes", "Yes"), 61, replace = T)
 # save(valuesforcolor, file = 'dat/valuesforcolor.RData')
-load(file = 'dat/valuesforcolor.RData')
+# load(file = 'dat/valuesforcolor.RData')
 # print(valuesforcolor)
-shapefile$colored1 <- valuesforcolor
-shapefile$colored2 <- valuesforcolor
-# print(shapefile$colored1)
-shapefile$Status2 <- shapefile$Status
+# shapefile$colored1 <- valuesforcolor
+# shapefile$colored2 <- valuesforcolor
+# # print(shapefile$colored1)
+# shapefile$Status2 <- shapefile$Status
 
 
 
