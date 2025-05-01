@@ -166,6 +166,19 @@ chosen_qpal_var <- reactive({
   # leaflet -----------------------------------------------------------------
   mapPrecursor <- reactive({
     leaflet(shapefileReactive()) %>%
+      addProviderTiles(
+        if (input$mode_toggle %in% "light") {
+          providers$CartoDB.Positron
+        } else {
+          providers$CartoDB.DarkMatter
+        }
+      ) %>%
+        # Add a tile layer with roads
+    # addProviderTiles(providers$CartoDB.Positron) %>%  # Light, clean map with roads
+    # Or alternatively:
+    # addProviderTiles(providers$OpenStreetMap) %>%  # Standard OpenStreetMap
+    # addProviderTiles(providers$Esri.WorldStreetMap) %>%  # More detailed street map
+        # Option 1: CartoDB Dark Matter - Elegant dark map with subtle road network
       addPolygons(,
         fillColor = ~ qpal()(chosen_qpal_var()),
         fillOpacity = 1,
