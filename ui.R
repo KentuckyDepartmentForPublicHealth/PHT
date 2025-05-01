@@ -173,11 +173,14 @@ nav_panel(
 # sidebar -----------------------------------------------------------------
 
   
-  sidebar = sidebar(id = 'mySidebar',
+  sidebar = sidebar(id = 'mySidebar', width = 350,
     h4('Map Toolbar'),
     actionButton('resetMap', 'Reset Map', icon=icon('rotate')),
     selectInput('whichcounty', strong('County Zoom'), choices = c('All', ky_counties), selected = 'All'),
-    selectInput('whichqpal', strong('Color Map By'), choices = c('LNA Submission Status' = 'Status', 'one' = 'Status2', 'two' = 'colored2'), selected = 'Status2'),
+    # In your UI.R file, update the selectInput
+selectInput('whichqpal', strong('Color Map By'), 
+  choices = color_map_choices, 
+  selected = 'Status'),
     br(),
     # input_switch('showallcounties', 'Show all counties?', value = T),
     # hr(),

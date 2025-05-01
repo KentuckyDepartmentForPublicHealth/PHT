@@ -113,16 +113,27 @@ server <- function(input, output, session) {
 
 
   # qpal --------------------------------------------------------------------
-  chosen_qpal_var <- reactive({
-    if (input$whichqpal == "Status") {
-      shapefile$Status
-    } else if (input$whichqpal == "Status2") {
-      shapefile$Status2
-    } else if (input$whichqpal == "colored2") {
-      shapefile$colored2
-    }
-  })
-
+chosen_qpal_var <- reactive({
+  if (input$whichqpal == "Status") {
+    shapefile$Status
+  } else if (input$whichqpal == "phpriority_2025___1") {
+    shapefile$phpriority_2025___1
+  } else if (input$whichqpal == "phpriority_2025___2") {
+    shapefile$phpriority_2025___2
+  } else if (input$whichqpal == "phpriority_2025___3") {
+    shapefile$phpriority_2025___3
+  } else if (input$whichqpal == "phpriority_2025___4") {
+    shapefile$phpriority_2025___4
+  } else if (input$whichqpal == "phpriority_2025___5") {
+    shapefile$phpriority_2025___5
+  } else if (input$whichqpal == "phpriority_2025___6") {
+    shapefile$phpriority_2025___6
+  } else if (input$whichqpal == "phpriority_2025___7") {
+    shapefile$phpriority_2025___7
+  } else if (input$whichqpal == "colored2") {
+    shapefile$colored2
+  }
+})
 
 
   qpal <- reactive({
@@ -178,7 +189,10 @@ server <- function(input, output, session) {
         }
       ) %>%
       addControl(paste("902 KAR 8:160 Local health department operations requirements", br(), br(), "Section 10: Identification of Local Needs"), position = "topright") %>%
-      addLegend(title = HTML(paste0("<span style='color: #0C3151; font-size: 1.2em;'>", 'LNA Submitted?',"</span>")),
+      addLegend(
+          title = HTML(paste0("<span style='color: #0C3151; font-size: 1.2em;'>", 
+                     names(which(color_map_choices == input$whichqpal)), 
+                     "</span>")),
                 position = 'topright',
                 values = ~chosen_qpal_var(), # change here
                 pal =  qpal(), # app WORKS
