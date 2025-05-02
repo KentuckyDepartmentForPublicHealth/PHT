@@ -181,9 +181,25 @@ nav_panel(
 selectInput('whichqpal', strong('Color Map By'), 
   choices = color_map_choices, 
   selected = 'Status'),
-    input_switch('showPHAB', 'Show accredited health departments?', value = F),
-
-    br(),
+  # option 1
+   # input_switch('showPHAB', 'Show accredited health departments?', value = F),
+  # option 2
+# tags$div(
+#   style = "display: flex; align-items: center; gap: 7px;",
+#   tags$input(id = "showPHAB", type = "checkbox", style = "margin:0;"),
+#   tags$img(src = "star-32.png", style = "width: 18px; height: 18px;"),
+#   tags$label("Show accredited health departments?", `for` = "showPHAB", style = "margin:0; cursor: pointer;")
+# ),
+  # option 3
+input_switch(
+  id = "showPHAB",
+  label = tagList(
+    tags$img(src = "star-32.png", style = "width: 18px; margin-bottom:2px; margin-right:4px;"),
+    "Show accredited health departments?"
+  ),
+  value = FALSE
+),
+    # br(),
     # input_switch('showallcounties', 'Show all counties?', value = T),
     # hr(),
     wellPanel(
