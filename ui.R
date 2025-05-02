@@ -97,14 +97,31 @@ footer = NULL,
 nav_panel(
   title = "Stats", icon = icon('chart-bar'),
   align = "right",
-  div(
-    style = "margin-bottom: 30px;",  # Adds space between the value box and the footer
-    uiOutput("my_value_box"),
+div(
+  style = "margin-bottom: 30px;",  # Adds space between the value box and the footer
+  uiOutput("my_value_box")),
+  # hr(),
+div(
+  style = "text-align: left;",
+h4(span(icon("flag"), "SHIP Priority Results Compared with LNA/Local Priorities", style = paste0("text-align: left; color:", chfs$cols9[1])))
+),
+fluidRow(
+  column(
+    width = 6,
     card(
       full_screen = TRUE,
-      height = "450px", # (adjust as you like)
-      plotOutput("priority_plot", fill = TRUE) # fill = TRUE ensures plot fills card area
+      height = "450px",
+      plotOutput("priority_plot", height = "400px", fill = TRUE)
     )
+  ),
+  column(
+    width = 6,
+    card(
+      full_screen = TRUE,
+      height = "450px",
+      plotOutput("priority_plot_number_2", height = "400px", fill = TRUE)
+    )
+  )
   )
 ),
 

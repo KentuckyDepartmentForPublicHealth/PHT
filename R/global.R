@@ -22,6 +22,7 @@ library(bsicons)
 library(httr)
 library(jsonlite)
 library(ggplot2)
+library(scales)
 # colors ------------------------------------------------------------------
 
 chfs <- list(
@@ -175,6 +176,34 @@ centroid_coords <- readRDS('dat/centroid_coords.rds')
 # pal <- colorNumeric(palette = "viridis", domain = shapefile$FID)
 # qpal <- colorFactor(palette = c('#004080', '#001F3F'), domain = shapefile$Compliance.Status)
 # qpal <- colorFactor(palette = c(chfs$cols9[6], chfs$cols9[2]), domain = shapefile$Status)
+
+# ship23 <- read.csv('dat/ship23.csv')
+# ship23$option2 <-  c(
+#   "Alcohol Use",
+#   "Asthma",
+#   "Sexual Activity",
+#   "Infectious Diseases",
+#   "Oral Health",
+#   "Alzheimers",
+#   "Suicide/Self Harm",
+#   "Cancer",
+#   "Diabetes",
+#   "Immunizations",
+#   "Maternal Child Health",
+#   "Cardiovascular Disease",
+#   "Adverse Childhood",
+#   "Community Safety",
+#   "Physical Activity",
+#   "Obesity",
+#   "Drug Use",
+#   "Nutrition",
+#   "Smoking/Vaping",
+#   "Mental Health",
+#   "Access to Care"
+# )
+# save(ship23, file ='dat/ship23.RData')
+load(file = 'dat/ship23.RData')
+
 
 # Function to read directories and capture files along with their folder names
 read_files_from_directories <- function(base_dir) {
