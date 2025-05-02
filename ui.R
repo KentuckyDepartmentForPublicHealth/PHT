@@ -181,6 +181,8 @@ nav_panel(
 selectInput('whichqpal', strong('Color Map By'), 
   choices = color_map_choices, 
   selected = 'Status'),
+    input_switch('showPHAB', 'Show accredited health departments?', value = F),
+
     br(),
     # input_switch('showallcounties', 'Show all counties?', value = T),
     # hr(),

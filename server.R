@@ -67,10 +67,13 @@ server <- function(input, output, session) {
       # )
     )
   })
-  #
+  
+  # reset map -----
+
   # Use leafletProxy() to update the map on reset instead of re-rendering it
   observeEvent(input$resetMap, {
     updateRadioButtons(session, "labelthemap", selected = "12px")
+    update_switch("showPHAB", value = FALSE)
     update_switch("showmarkers", value = TRUE)
     update_switch("showpopup", value = TRUE)
     updateSelectInput(session, "whichcounty", selected = "All")
@@ -218,6 +221,7 @@ chosen_qpal_var <- reactive({
                 # pal = qpal, # interactive
                 opacity = 1
       ) %>%
+      # location markers
       {
         if (!input$showmarkers) {
           .
@@ -249,6 +253,50 @@ chosen_qpal_var <- reactive({
           )
         }
       } %>%
+
+# accredited health departments
+{
+  if (!input$showPHAB) {
+    .
+  } else {
+    # Filter to only show features where Status is not NA and not empty
+    filtered_shape <- shapefileReactive() %>%
+      # filter(!is.na(Status) & Status != "")
+      filter(Status == "No")
+
+    # Prepare the custom red star icon
+    redStarIcon <- makeIcon(
+      iconUrl = "star-32.png",
+      iconWidth = 32, iconHeight = 32,
+      iconAnchorX = 16, iconAnchorY = 16
+    )
+    addMarkers(.,
+      lng = ~ as.numeric(unlist(filtered_shape$INTPTLON10)),
+      lat = ~ as.numeric(unlist(filtered_shape$INTPTLAT10)),
+      icon = redStarIcon,
+      popup = ~ {
+        lapply(1:nrow(filtered_shape), function(i) {
+          marker_files <- nested_data_flat %>%
+            filter(NAME %in% filtered_shape$NAMELSAD10[i])
+          if (nrow(marker_files) == 0 || all(is.na(marker_files$files))) {
+            "No files available"
+          } else {
+            paste0(
+              "<ul class='mapfilebullet'>",
+              paste0("<li><a href='", marker_files$files,
+                "' target='_blank'>",
+                basename(marker_files$files),
+                "</a></li>",
+                collapse = ""
+              ),
+              "</ul>"
+            )
+          }
+        })
+      }
+    )
+  }
+} %>%
       # addMarkers(lng = centroid_coords[, 1], lat = centroid_coords[, 2]) %>%
       {
         if (input$labelthemap %in% "nolabels") {
