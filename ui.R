@@ -99,7 +99,12 @@ nav_panel(
   align = "right",
   div(
     style = "margin-bottom: 30px;",  # Adds space between the value box and the footer
-    uiOutput("my_value_box")
+    uiOutput("my_value_box"),
+    card(
+      full_screen = TRUE,
+      height = "450px", # (adjust as you like)
+      plotOutput("priority_plot", fill = TRUE) # fill = TRUE ensures plot fills card area
+    )
   )
 ),
 

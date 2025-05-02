@@ -68,6 +68,38 @@ server <- function(input, output, session) {
     )
   })
   
+output$priority_plot <- renderPlot({
+  # Assuming `data`, `priority_labels`, and `chfs$cols7` are defined in your server
+
+  shapefile %>%
+  as.data.frame() %>%
+    select(starts_with("phpriority"), -matches("factor|oth|8")) %>%
+    mutate(across(everything(), as.integer)) %>%
+    pivot_longer(
+      cols = everything(),
+      names_to = "priority",
+      values_to = "selected"
+    ) %>%
+    filter(selected == 1) %>%
+    count(priority) %>%
+    mutate(priority_label = recode(priority, !!!priority_labels)) %>%
+    ggplot(aes(x = reorder(priority_label, n), y = n, fill = priority_label)) +
+    geom_col(show.legend = FALSE) +
+    geom_text(aes(label = n), hjust = -0.2, size = 4) +
+    scale_fill_manual(values = chfs$cols7) +
+    scale_y_continuous(expand = expansion(mult = c(0, 0.2))) +
+    coord_flip() +
+    labs(
+      x = "Public Health Priority",
+      y = "Number of LHDs",
+      title = "Local Public Health Priorities Selected by LHDs"
+    ) +
+    theme_minimal(base_size = 16) +
+    theme(
+      plot.margin = margin(t = 10, r = 40, b = 10, l = 10)
+    )
+})
+
   # reset map -----
 
   # Use leafletProxy() to update the map on reset instead of re-rendering it

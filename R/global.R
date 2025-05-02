@@ -21,6 +21,7 @@ library(shinycssloaders)
 library(bsicons)
 library(httr)
 library(jsonlite)
+library(ggplot2)
 # colors ------------------------------------------------------------------
 
 chfs <- list(
@@ -217,7 +218,15 @@ color_map_choices <- c(
   "two" = "colored2"
 )
 
-
+priority_labels <- c(
+  phpriority_2025___1 = "Chronic Disease Mgmt",
+  phpriority_2025___2 = "Cancer Control/Screening",
+  phpriority_2025___3 = "Womens Health",
+  phpriority_2025___4 = "Pediatric Health",
+  phpriority_2025___5 = "Adult Health",
+  phpriority_2025___6 = "Health Access",
+  phpriority_2025___7 = "Health Inequities"
+)
 
 # end ---------------------------------------------------------------------
 
