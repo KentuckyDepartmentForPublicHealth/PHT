@@ -63,51 +63,70 @@ server <- function(input, output, session) {
   
 output$priority_plot <- renderPlot({
   # Assuming `data`, `priority_labels`, and `chfs$cols7` are defined in your server
-  priority_plot_data %>% 
-  ggplot(aes(x = reorder(priority_label, prop), y = prop, fill = priority_label)) +
-  geom_col(show.legend = FALSE) +
-  geom_text(aes(label = scales::percent(prop, accuracy = 1)),
-    hjust = -0.2, size = 5,
-    color = if (input$mode_toggle == "dark") "white" else "black"
-  ) +
-  scale_y_continuous(
-    labels = scales::percent_format(accuracy = 1),
-    expand = expansion(mult = c(0, 0.2))
-  ) +
-  # Conditional fill palette (light mode only)
-  {
-    if (input$mode_toggle %in% "dark") NULL else scale_fill_manual(values = chfs$cols7)
-  } +
-  coord_flip() +
-  labs(
-    # x = "Public Health Priority",
-    x = NULL,
-    y = "Percent of all LHDs",
-    title = "Local Public Health Priorities Selected by LHDs"
-  ) +
-  # Conditional theme (dark/light)
-  { if (input$mode_toggle %in% "dark") 
-      theme_dark(base_size = 16) +
-      theme(
-        panel.background = element_rect(fill = "#222222", color = NA),
-        plot.background = element_rect(fill = "#111111", color = NA),
-        text = element_text(color = "white"),
-        axis.text = element_text(color = "white"),
-        plot.title = element_text(color = "white")
-      )
-    else 
-      theme_minimal(base_size = 16) +
-      theme(
-        panel.background = element_rect(fill = "white", color = NA),
-        plot.background = element_rect(fill = "white", color = NA),
-        text = element_text(color = "black"),
-        axis.text = element_text(color = "black"),
-        plot.title = element_text(color = "black")
-      )
-  } +
-  theme(plot.margin = margin(t = 10, r = 40, b = 10, l = 10))
+  # Store total number of LHDs (records) separately
+  total_lhds <- nrow(shapefile)
 
+  shapefile %>%
+    as.data.frame() %>%
+    select(starts_with("phpriority"), -matches("factor|oth|8")) %>%
+    mutate(across(everything(), as.integer)) %>%
+    pivot_longer(
+      cols = everything(),
+      names_to = "priority",
+      values_to = "selected"
+    ) %>%
+    filter(selected == 1) %>%
+    count(priority) %>%
+    mutate(
+      priority_label = recode(priority, !!!priority_labels),
+      prop = n / total_lhds
+    ) %>%
+    ggplot(aes(x = reorder(priority_label, prop), y = prop, fill = priority_label)) +
+    geom_col(show.legend = FALSE) +
+    geom_text(aes(label = scales::percent(prop, accuracy = 1)),
+      hjust = -0.2, size = 5,
+      color = if (input$mode_toggle == "dark") "white" else "black"
+    ) +
+    scale_y_continuous(
+      labels = scales::percent_format(accuracy = 1),
+      expand = expansion(mult = c(0, 0.2))
+    ) +
+    # Conditional fill palette (light mode only)
+    {
+      if (input$mode_toggle %in% "dark") NULL else scale_fill_manual(values = chfs$cols7)
+    } +
+    coord_flip() +
+    labs(
+      # x = "Public Health Priority",
+      x = NULL,
+      y = "Percent of all LHDs",
+      title = "Local Public Health Priorities Selected by LHDs"
+    ) +
+    # Conditional theme (dark/light)
+    {
+      if (input$mode_toggle %in% "dark") {
+        theme_dark(base_size = 16) +
+          theme(
+            panel.background = element_rect(fill = "#222222", color = NA),
+            plot.background = element_rect(fill = "#111111", color = NA),
+            text = element_text(color = "white"),
+            axis.text = element_text(color = "white"),
+            plot.title = element_text(color = "white")
+          )
+      } else {
+        theme_minimal(base_size = 16) +
+          theme(
+            panel.background = element_rect(fill = "white", color = NA),
+            plot.background = element_rect(fill = "white", color = NA),
+            text = element_text(color = "black"),
+            axis.text = element_text(color = "black"),
+            plot.title = element_text(color = "black")
+          )
+      }
+    } +
+    theme(plot.margin = margin(t = 10, r = 40, b = 10, l = 10))
 })
+
 
 output$priority_plot_number_2 <- renderPlot({
     n_options <- dplyr::n_distinct(ship23$option2)
@@ -213,24 +232,11 @@ output$priority_plot_number_2 <- renderPlot({
 chosen_qpal_var <- reactive({
   if (input$whichqpal == "Status") {
     shapefile$Status
-  } else if (input$whichqpal == "phpriority_2025___1") {
-    shapefile$phpriority_2025___1
-  } else if (input$whichqpal == "phpriority_2025___2") {
-    shapefile$phpriority_2025___2
-  } else if (input$whichqpal == "phpriority_2025___3") {
-    shapefile$phpriority_2025___3
-  } else if (input$whichqpal == "phpriority_2025___4") {
-    shapefile$phpriority_2025___4
-  } else if (input$whichqpal == "phpriority_2025___5") {
-    shapefile$phpriority_2025___5
-  } else if (input$whichqpal == "phpriority_2025___6") {
-    shapefile$phpriority_2025___6
-  } else if (input$whichqpal == "phpriority_2025___7") {
-    shapefile$phpriority_2025___7
   } else if (input$whichqpal == "is_accredited") {
     shapefile$is_accredited
+  } else if (grepl("^phpriority_2025___\\d$", input$whichqpal)) {
+    shapefile[[paste0(input$whichqpal, "_yn")]]
   }
-
 })
 
 

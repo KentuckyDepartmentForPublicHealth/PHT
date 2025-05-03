@@ -159,16 +159,16 @@ shapefile <- shapefile2025
 shapefile <- shapefile %>%
   mutate(
     across(
-      starts_with("phpriority") &
-        !matches("factor|oth|8"),
+      starts_with("phpriority") & !matches("factor|oth|8"),
       ~ case_when(
-        . == 1 ~ "Yes",
-        . == 0 ~ "No",
-        TRUE ~ NA_character_ # preserves NA
+        as.integer(.) == 1 ~ "Yes",
+        as.integer(.) == 0 ~ "No",
+        TRUE ~ NA_character_
       ),
-      .names = "{.col}"
+      .names = "{.col}_yn"
     )
   )
+
 
 # test qpal dynamic inputs
 # valuesforcolor <- sample(c("Yes", "No", "Yes", "Yes", "Yes", "Yes"), 61, replace = T)
@@ -327,23 +327,6 @@ priority_labels <- c(
 
 numberOfAccreditedLHDs <- sum(shapefile$is_accredited)
 
-# priorty plot data analysis ----------------------------------------------
-total_lhds <- nrow(shapefile) # Store total number of LHDs (records) separately
-priority_plot_data <- shapefile %>%
-  as.data.frame() %>%
-  select(starts_with("phpriority"), -matches("factor|oth|8")) %>%
-  mutate(across(everything(), as.integer)) %>%
-  pivot_longer(
-    cols = everything(),
-    names_to = "priority",
-    values_to = "selected"
-  ) %>%
-  filter(selected == 1) %>%
-  count(priority) %>%
-  mutate(
-    priority_label = recode(priority, !!!priority_labels),
-    prop = n / total_lhds
-  ) 
 # extra -------------------------------------------------------------------
 
 
