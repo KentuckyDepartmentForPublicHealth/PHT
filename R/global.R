@@ -166,7 +166,9 @@ shapefile <- shapefile %>%
         TRUE ~ NA_character_
       ),
       .names = "{.col}_yn"
-    )
+    ),
+        Status = if_else(NAMELSAD10 %in% c("Johnson County", "Lincoln County"), "No", "Yes")
+
   )
 
 
