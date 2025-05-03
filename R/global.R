@@ -46,12 +46,10 @@ chfs <- list(
 # currentDate <- format(Sys.time(), '%a, %b %d, %Y at %I:%M %p EDT')
 # saveRDS(currentDate, file = 'dat/currentDate.rds')
 # currentDate <- readRDS(file = 'dat/currentDate.rds')
-# ... existing code ...
 
 git_info <- system("git log -1 --format='%cd' --date=iso", intern = TRUE)
 currentDate <- format(as.POSIXct(git_info), "%a, %b %d, %Y at %I:%M %p %Z")
 
-# ... rest of code ...
 # rsconnect::deployApp(account = 'kdph', appName = 'pht-dashboard', appVisibility = 'public', logLevel = 'verbose')
 
 
