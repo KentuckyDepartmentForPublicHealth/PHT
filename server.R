@@ -14,7 +14,9 @@ server <- function(input, output, session) {
     }
   })
 
-
+observe({
+  session$sendCustomMessage("toggleSidebarBg", input$mode_toggle)
+})
   # valuebox ----------------------------------------------------------------
 
 

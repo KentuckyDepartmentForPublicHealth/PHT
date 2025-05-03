@@ -39,7 +39,26 @@ footer = NULL,
     title = 'Home', icon = icon('house'),
     tags$head(
       tags$link(rel = "stylesheet", type = "text/css", href = "PHT.css"),
-      tags$link(rel = "shortcut icon", href = "favicon.ico")
+      tags$link(rel = "shortcut icon", href = "favicon.ico"),
+        tags$script(HTML('
+    Shiny.addCustomMessageHandler("toggleSidebarBg", function(mode) {
+      var el = document.getElementById("mySidebar");
+      if (el) {
+        if (mode === "dark") {
+          el.style.background = "#181c24";
+          el.style.color = "#fafaff";
+        } else {
+          el.style.background = "#f5f5f5";
+          el.style.color = "#16161a";
+        }
+        // Optionally update all child links and icons too:
+        var links = el.querySelectorAll("a, .fa, .fas, .fab, .far, .glyphicon");
+        for (var i = 0; i < links.length; i++) {
+          links[i].style.color = el.style.color;
+        }
+      }
+    });
+      '))
     ),
         h2('Kentucky Local Health Departments'),
     HTML("<p>This site hosts Kentucky Local Health Departments' <span style=\"font-weight: bold;\"> most recently submitted Local Needs Assessment (LNA)</span>, also called Community Health Assessment (CHA), Community Health Improvement Plan (CHIP) or Community Health Needs Assessment (CHNA), for their jurisdiction served as <a href=\"doc/KentuckyLaw.pdf\" target=\"_blank\">required by Kentucky law.</a></p>"),
@@ -204,8 +223,9 @@ fluidRow(
 # sidebar -----------------------------------------------------------------
 
   
-  sidebar = sidebar(id = 'mySidebar', width = 350,
-    h4('Map Toolbar'),
+  sidebar = sidebar(
+    id = 'mySidebar', width = 350,
+    h4(icon("wrench"),  strong('Map Toolbox')),
     actionButton('resetMap', 'Reset Map', icon=icon('rotate')),
     selectInput('whichcounty', strong('County Zoom'), choices = c('All', ky_counties), selected = 'All'),
     # In your UI.R file, update the selectInput
