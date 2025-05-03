@@ -22,7 +22,7 @@ server <- function(input, output, session) {
   output$my_value_box <- renderUI({
     layout_columns(
       value_box(
-        title = "% of 61 Local Health Departments (county, district, and independent) who've submitted a Local Needs Assessment",
+        title = "% of 61 Local Health Departments who've submitted a Local Needs Assessment",
         value = paste0(sprintf("%0.0f", prop.table(table(shapefile$Status))[[2]] * 100), "%"),
         theme = value_box_theme(
           bg = if (input$mode_toggle %in% "dark") chfs$cols9[2] else chfs$cols9[9],
@@ -33,7 +33,7 @@ server <- function(input, output, session) {
         height = NULL # Set height of the value box
       ),
       value_box(
-        title = "Number of downloadable files available in this site (some LHDs submitted more than 1 document)",
+        title = "Number of downloadable files available in this site",
         value = numberOfListings,
         theme = value_box_theme(
           bg = if (input$mode_toggle %in% "dark") chfs$cols9[2] else chfs$cols9[9],
@@ -42,29 +42,19 @@ server <- function(input, output, session) {
         showcase = icon("hashtag"),
         showcase_layout = "top right", full_screen = T, fill = T,
         height = NULL # Set height of the value box
+      ),
+      value_box(
+        title = "Number of accredited local health departments",
+        value = numberOfAccreditedLHDs,
+        theme = value_box_theme(
+          bg = if (input$mode_toggle %in% "dark") chfs$cols9[2] else chfs$cols9[9],
+          fg = if (input$mode_toggle %in% "dark") "white" else chfs$cols9[2]
+        ),
+        showcase = icon("award"),
+        showcase_layout = "top right", full_screen = T, fill = T,
+        height = NULL # Set height of the value box
       )
-      # value_box(
-      #   title = "Top Health Priorities",
-      #   value = HTML("<ol>
-      #   <li>Substance Abuse</li>
-      #   <li>Physical Health</li>
-      #   <li>Mental Health</li>
-      #   <li>Access To Care</li>
-      #   <li>Tobacco</li>
-      #   <li>Cancer</li>
-      #   <li>Diabetes</li>
-      #   <li>Food Security/Access</li>
-      #   <li>Cardiovascular Disease</li>
-      #   <li>Housing</li>
-      #   </ol>"),
-      #   theme = value_box_theme(
-      #     bg = if (input$mode_toggle %in% 'dark') chfs$cols9[2] else chfs$cols9[9],
-      #     fg = if (input$mode_toggle %in% 'dark') 'white' else chfs$cols9[2]
-      #   ),
-      #   showcase = icon('calendar-check'),
-      #   showcase_layout = "top right", full_screen = T, fill = T,
-      #   height = NULL      # Set height of the value box
-      # )
+
     )
   })
   

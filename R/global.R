@@ -281,36 +281,36 @@ priority_labels <- c(
 
 # Update NAMELSAD10 in the shapefile
 # Define the second set names that map to the first set (health departments)
-accredited_names <- c(
-  "Barren River Health District",
-  "Buffalo Trace Health District",
-  "Bullitt County",
-  "Christian County",
-  "Franklin County",
-  "Green River Health District",
-  "Jessamine County",
-  "Fayette County",
-  "Jefferson County",
-  "Lake Cumberland Health District",
-  "Laurel County",
-  "Lincoln Trail Health District",
-  "Madison County",
-  "Marshall County",
-  "Montgomery County",
-  "Northern Kentucky Health District",
-  "Three Rivers Health District",
-  "Wedco Health District"
-)
+# accredited_names <- c(
+#   "Barren River Health District",
+#   "Buffalo Trace Health District",
+#   "Bullitt County",
+#   "Christian County",
+#   "Franklin County",
+#   "Green River Health District",
+#   "Jessamine County",
+#   "Fayette County",
+#   "Jefferson County",
+#   "Lake Cumberland Health District",
+#   "Laurel County",
+#   "Lincoln Trail Health District",
+#   "Madison County",
+#   "Marshall County",
+#   "Montgomery County",
+#   "Northern Kentucky Health District",
+#   "Three Rivers Health District",
+#   "Wedco Health District"
+# )
 
 # # Create new variable is_accredited
-shapefile2025$is_accredited <- as.logical(shapefile2025$NAMELSAD10 %in% accredited_names)
+# shapefile2025$is_accredited <- as.logical(shapefile2025$NAMELSAD10 %in% accredited_names)
 # table(shapefile$is_accredited, useNA = "ifany")
 # select(shapefile, NAMELSAD10, is_accredited)  %>% 
 # filter(is_accredited) %>% 
 # pull(NAMELSAD10) %>% 
 # sort()
 
-
+numberOfAccreditedLHDs <- sum(shapefile$is_accredited)
 # extra -------------------------------------------------------------------
 
 

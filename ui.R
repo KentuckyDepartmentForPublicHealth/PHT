@@ -98,7 +98,16 @@ nav_panel(
   title = "Stats", icon = icon('chart-bar'),
   align = "right",
 div(
-  style = "margin-bottom: 30px;",  # Adds space between the value box and the footer
+  style = "margin-top: 30px; text-align: left;",  # Adds space between the value box and the footer
+  h4(
+    span(
+      icon("gauge-high"),
+      "Local Health Departments: Submission, Resources, & Accreditation Snapshot",
+      style = paste0("color:", chfs$cols9[1])
+    )
+  ),
+    div(style = "height: 25px;"),        # Adds more space
+
   uiOutput("my_value_box")),
   # hr(),
 div(
@@ -111,7 +120,7 @@ fluidRow(
     card(
       full_screen = TRUE,
       height = "450px",
-      plotOutput("priority_plot", height = "400px", fill = TRUE)
+      plotOutput("priority_plot_number_2", height = "400px", fill = TRUE)
     )
   ),
   column(
@@ -119,7 +128,7 @@ fluidRow(
     card(
       full_screen = TRUE,
       height = "450px",
-      plotOutput("priority_plot_number_2", height = "400px", fill = TRUE)
+      plotOutput("priority_plot", height = "400px", fill = TRUE)
     )
   )
   )
