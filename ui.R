@@ -226,7 +226,7 @@ fluidRow(
   
   sidebar = sidebar(
     id = 'mySidebar', width = 350,
-    h3(icon("wrench"),  strong('Map Toolbox')),
+    h3(icon("hammer"),  strong('Map Toolbox')),
   actionButton('resetMap', 'Reset Map', icon=icon('rotate'), class = "btn-primary"),
     selectInput('whichcounty', strong('County Zoom'), choices = c('All', ky_counties), selected = 'All'),
     # In your UI.R file, update the selectInput
