@@ -311,6 +311,24 @@ priority_labels <- c(
 # sort()
 
 numberOfAccreditedLHDs <- sum(shapefile$is_accredited)
+
+# priorty plot data analysis ----------------------------------------------
+total_lhds <- nrow(shapefile) # Store total number of LHDs (records) separately
+priority_plot_data <- shapefile %>%
+  as.data.frame() %>%
+  select(starts_with("phpriority"), -matches("factor|oth|8")) %>%
+  mutate(across(everything(), as.integer)) %>%
+  pivot_longer(
+    cols = everything(),
+    names_to = "priority",
+    values_to = "selected"
+  ) %>%
+  filter(selected == 1) %>%
+  count(priority) %>%
+  mutate(
+    priority_label = recode(priority, !!!priority_labels),
+    prop = n / total_lhds
+  ) 
 # extra -------------------------------------------------------------------
 
 

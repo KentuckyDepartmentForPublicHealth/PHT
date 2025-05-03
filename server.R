@@ -60,24 +60,7 @@ server <- function(input, output, session) {
   
 output$priority_plot <- renderPlot({
   # Assuming `data`, `priority_labels`, and `chfs$cols7` are defined in your server
-# Store total number of LHDs (records) separately
-total_lhds <- nrow(shapefile)
-
-shapefile %>%
-  as.data.frame() %>%
-  select(starts_with("phpriority"), -matches("factor|oth|8")) %>%
-  mutate(across(everything(), as.integer)) %>%
-  pivot_longer(
-    cols = everything(),
-    names_to = "priority",
-    values_to = "selected"
-  ) %>%
-  filter(selected == 1) %>%
-  count(priority) %>%
-  mutate(
-    priority_label = recode(priority, !!!priority_labels),
-    prop = n / total_lhds
-  ) %>%
+  priority_plot_data %>% 
   ggplot(aes(x = reorder(priority_label, prop), y = prop, fill = priority_label)) +
   geom_col(show.legend = FALSE) +
   geom_text(aes(label = scales::percent(prop, accuracy = 1)),
