@@ -14,9 +14,10 @@ server <- function(input, output, session) {
     }
   })
 
-observe({
-  session$sendCustomMessage("toggleSidebarBg", input$mode_toggle)
-})
+# javascript for sidebar background color --------------------------------
+# observe({
+#   session$sendCustomMessage("toggleSidebarBg", input$mode_toggle)
+# })
   # valuebox ----------------------------------------------------------------
 
 
