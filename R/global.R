@@ -152,7 +152,7 @@ load(file = 'dat/select2cols.RData') # add Listing
 # shapefile <- st_read('dat/temp/ky-lhd.shp')
 # shapefile <- st_transform(shapefile, crs = 4326)
 # shapefile <- merge(shapefile, select2cols, by = 'FID')
-# save(shapefile, file = 'dat/shapefile.RData')
+# save(shapefile2025, file = 'dat/shapefile2025.RData')
 load(file = 'dat/shapefile2025.RData') # from redcap-api in onedev
 shapefile <- shapefile2025
 # test qpal dynamic inputs
@@ -236,15 +236,14 @@ nested_data_flat <- nested_data2 %>%
 # Define the color map choices once
 color_map_choices <- c(
   "LNA Submission Status" = "Status",
-  "PHAB Accreditation Status" = "phab_status",
+  "PHAB Accreditation Status" = "is_accredited",
   "Local Priority: Chronic Disease" = "phpriority_2025___1",
   "Local Priority: Cancer Control" = "phpriority_2025___2",
   "Local Priority: Women's Health" = "phpriority_2025___3",
   "Local Priority: Pediatric Health" = "phpriority_2025___4",
   "Local Priority: Adult Health" = "phpriority_2025___5",
   "Local Priority: Health Access" = "phpriority_2025___6",
-  "Local Priority: Health Inequities" = "phpriority_2025___7",
-  "two" = "colored2"
+  "Local Priority: Health Inequities" = "phpriority_2025___7"
 )
 
 priority_labels <- c(
@@ -257,8 +256,59 @@ priority_labels <- c(
   phpriority_2025___7 = "Health Inequities"
 )
 
-# end ---------------------------------------------------------------------
+# # accreditation
+# Define the mapping vector (first set to second set)
+# health_dept_mapping <- c(
+#   "Barren River Health District" = "Barren River District Health Department",
+#   "Buffalo Trace Health District" = "Buffalo Trace District Health Department",
+#   "Bullitt County" = "Bullitt County Health Dept.",
+#   "Christian County" = "Christian County Health Department",
+#   "Franklin County" = "Franklin County Health Department",
+#   "Green River Health District" = "Green River District Health Department",
+#   "Jessamine County" = "Jessamine County Health Department",
+#   "Fayette County" = "Lexington-Fayette County Health Department",
+#   "Jefferson County" = "Louisville Metro Public Health and Wellness",
+#   "Lake Cumberland Health District" = "Lake Cumberland District Health Department",
+#   "Laurel County" = "Laurel County Health Department",
+#   "Lincoln Trail Health District" = "Lincoln Trail District Health Department",
+#   "Madison County" = "Madison County Health Department",
+#   "Marshall County" = "Marshall County Health Department",
+#   "Montgomery County" = "Montgomery County Health Department",
+#   "Northern Kentucky Health District" = "Northern Kentucky Independent District Health Department",
+#   "Three Rivers Health District" = "Three Rivers District Health Department",
+#   "Wedco Health District" = "WEDCO District Health Department"
+# )
 
+# Update NAMELSAD10 in the shapefile
+# Define the second set names that map to the first set (health departments)
+accredited_names <- c(
+  "Barren River Health District",
+  "Buffalo Trace Health District",
+  "Bullitt County",
+  "Christian County",
+  "Franklin County",
+  "Green River Health District",
+  "Jessamine County",
+  "Fayette County",
+  "Jefferson County",
+  "Lake Cumberland Health District",
+  "Laurel County",
+  "Lincoln Trail Health District",
+  "Madison County",
+  "Marshall County",
+  "Montgomery County",
+  "Northern Kentucky Health District",
+  "Three Rivers Health District",
+  "Wedco Health District"
+)
+
+# # Create new variable is_accredited
+shapefile2025$is_accredited <- as.logical(shapefile2025$NAMELSAD10 %in% accredited_names)
+# table(shapefile$is_accredited, useNA = "ifany")
+# select(shapefile, NAMELSAD10, is_accredited)  %>% 
+# filter(is_accredited) %>% 
+# pull(NAMELSAD10) %>% 
+# sort()
 
 
 # extra -------------------------------------------------------------------

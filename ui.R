@@ -216,7 +216,7 @@ selectInput('whichqpal', strong('Color Map By'),
 input_switch(
   id = "showPHAB",
   label = tagList(
-    tags$img(src = "star-32.png", style = "width: 18px; margin-bottom:2px; margin-right:4px;"),
+    tags$img(src = "star-32-gold.png", style = "width: 18px; margin-bottom:2px; margin-right:4px;"),
     "Show accredited health departments?"
   ),
   value = FALSE

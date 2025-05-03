@@ -251,19 +251,22 @@ chosen_qpal_var <- reactive({
     shapefile$phpriority_2025___6
   } else if (input$whichqpal == "phpriority_2025___7") {
     shapefile$phpriority_2025___7
-  } else if (input$whichqpal == "colored2") {
-    shapefile$colored2
+  } else if (input$whichqpal == "is_accredited") {
+    shapefile$is_accredited
   }
+
 })
 
 
   qpal <- reactive({
     if (input$mode_toggle %in% "dark") {
       # dark
-      colorFactor(palette = c(chfs$cols9[2], chfs$cols9[7]), domain = chosen_qpal_var())
+      # colorFactor(palette = c(chfs$cols9[2], chfs$cols9[7]), domain = chosen_qpal_var()) # original
+      colorFactor(palette = c("#49120C", chfs$cols9[7]), domain = chosen_qpal_var())
     } else {
       # light
-      colorFactor(palette = c(chfs$cols9[9], chfs$cols9[1]), domain = chosen_qpal_var())
+      # colorFactor(palette = c(chfs$cols9[9], chfs$cols9[1]), domain = chosen_qpal_var()) # original
+      colorFactor(palette = c("#C78989", chfs$cols9[1]), domain = chosen_qpal_var()) 
     }
   })
 
@@ -380,11 +383,12 @@ chosen_qpal_var <- reactive({
     # Filter to only show features where Status is not NA and not empty
     filtered_shape <- shapefileReactive() %>%
       # filter(!is.na(Status) & Status != "")
-      filter(Status == "No")
+      # filter(Status == "No")
+      filter(is_accredited)
 
-    # Prepare the custom red star icon
+    # Prepare the custom star icon
     redStarIcon <- makeIcon(
-      iconUrl = "star-32.png",
+      iconUrl = "star-32-gold.png",
       iconWidth = 32, iconHeight = 32,
       iconAnchorX = 16, iconAnchorY = 16
     )
