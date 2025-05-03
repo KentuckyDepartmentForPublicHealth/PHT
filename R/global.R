@@ -155,6 +155,21 @@ load(file = 'dat/select2cols.RData') # add Listing
 # save(shapefile2025, file = 'dat/shapefile2025.RData')
 load(file = 'dat/shapefile2025.RData') # from redcap-api in onedev
 shapefile <- shapefile2025
+
+shapefile <- shapefile %>%
+  mutate(
+    across(
+      starts_with("phpriority") &
+        !matches("factor|oth|8"),
+      ~ case_when(
+        . == 1 ~ "Yes",
+        . == 0 ~ "No",
+        TRUE ~ NA_character_ # preserves NA
+      ),
+      .names = "{.col}"
+    )
+  )
+
 # test qpal dynamic inputs
 # valuesforcolor <- sample(c("Yes", "No", "Yes", "Yes", "Yes", "Yes"), 61, replace = T)
 # save(valuesforcolor, file = 'dat/valuesforcolor.RData')
