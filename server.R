@@ -25,7 +25,7 @@ server <- function(input, output, session) {
   output$my_value_box <- renderUI({
     layout_columns(
       value_box(
-        title = "Percentage of Kentucky Health Departments who've submitted a Local Needs Assessment",
+        title = "Percentage of health departments in Kentucky who've submitted a Local Needs Assessment",
         value = paste0(sprintf("%0.0f", prop.table(table(shapefile$Status))[[2]] * 100), "%"),
         theme = value_box_theme(
           bg = if (input$mode_toggle %in% "dark") chfs$cols9[2] else chfs$cols9[9],
