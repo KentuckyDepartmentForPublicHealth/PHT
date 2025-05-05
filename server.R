@@ -236,6 +236,8 @@ chosen_qpal_var <- reactive({
     shapefile$is_accredited
   } else if (grepl("^phpriority_2025___\\d$", input$whichqpal)) {
     shapefile[[paste0(input$whichqpal, "_yn")]]
+  } else {
+    shapefile$none <- ''
   }
 })
 

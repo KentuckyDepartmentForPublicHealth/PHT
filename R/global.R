@@ -256,14 +256,15 @@ nested_data_flat <- nested_data2 %>%
 # Define the color map choices once
 color_map_choices <- c(
   "LNA Submission Status" = "Status",
-  "PHAB Accreditation Status" = "is_accredited",
+  "PHAB: Is Accredited?" = "is_accredited",
   "Local Priority: Chronic Disease" = "phpriority_2025___1",
   "Local Priority: Cancer Control" = "phpriority_2025___2",
   "Local Priority: Women's Health" = "phpriority_2025___3",
   "Local Priority: Pediatric Health" = "phpriority_2025___4",
   "Local Priority: Adult Health" = "phpriority_2025___5",
   "Local Priority: Health Access" = "phpriority_2025___6",
-  "Local Priority: Health Inequities" = "phpriority_2025___7"
+  "Local Priority: Health Inequities" = "phpriority_2025___7",
+  "Solid Color" = "none"
 )
 
 priority_labels <- c(
