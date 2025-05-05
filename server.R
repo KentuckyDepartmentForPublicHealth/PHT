@@ -31,18 +31,7 @@ server <- function(input, output, session) {
           bg = if (input$mode_toggle %in% "dark") chfs$cols9[2] else chfs$cols9[9],
           fg = if (input$mode_toggle %in% "dark") "white" else chfs$cols9[2]
         ),
-        showcase = icon("calendar-check"),
-        showcase_layout = "top right", full_screen = T, fill = T,
-        height = NULL # Set height of the value box
-      ),
-      value_box(
-        title = "Number of downloadable files available in this site",
-        value = numberOfListings,
-        theme = value_box_theme(
-          bg = if (input$mode_toggle %in% "dark") chfs$cols9[2] else chfs$cols9[9],
-          fg = if (input$mode_toggle %in% "dark") "white" else chfs$cols9[2]
-        ),
-        showcase = icon("hashtag"),
+        showcase = icon("inbox"),
         showcase_layout = "top right", full_screen = T, fill = T,
         height = NULL # Set height of the value box
       ),
@@ -54,6 +43,17 @@ server <- function(input, output, session) {
           fg = if (input$mode_toggle %in% "dark") "white" else chfs$cols9[2]
         ),
         showcase = icon("award"),
+        showcase_layout = "top right", full_screen = T, fill = T,
+        height = NULL # Set height of the value box
+      ),
+      value_box(
+        title = "Number of downloadable files available in this site",
+        value = numberOfListings,
+        theme = value_box_theme(
+          bg = if (input$mode_toggle %in% "dark") chfs$cols9[2] else chfs$cols9[9],
+          fg = if (input$mode_toggle %in% "dark") "white" else chfs$cols9[2]
+        ),
+        showcase = icon("download"),
         showcase_layout = "top right", full_screen = T, fill = T,
         height = NULL # Set height of the value box
       )
