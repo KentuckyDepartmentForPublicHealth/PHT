@@ -47,7 +47,7 @@ server <- function(input, output, session) {
         height = NULL # Set height of the value box
       ),
       value_box(
-        title = "Number of accredited local health departments",
+        title = "Number (percentage) of accredited local health departments",
         value = numberOfAccreditedLHDs,
         theme = value_box_theme(
           bg = if (input$mode_toggle %in% "dark") chfs$cols9[2] else chfs$cols9[9],

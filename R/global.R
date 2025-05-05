@@ -174,6 +174,8 @@ shapefile <- shapefile %>%
 
   )
 
+  # Store total number of LHDs (records) separately
+  total_lhds <- nrow(shapefile)
 
 # test qpal dynamic inputs
 # valuesforcolor <- sample(c("Yes", "No", "Yes", "Yes", "Yes", "Yes"), 61, replace = T)
@@ -332,7 +334,8 @@ priority_labels <- c(
 # sort()
 
 numberOfAccreditedLHDs <- sum(shapefile$is_accredited)
-
+accreditationPercent <- round(100 * numberOfAccreditedLHDs / nrow(shapefile), 1)
+numberOfAccreditedLHDs <- paste(numberOfAccreditedLHDs, " (", accreditationPercent, "%)", sep = "")
 # extra -------------------------------------------------------------------
 
 
