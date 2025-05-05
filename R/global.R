@@ -334,8 +334,8 @@ priority_labels <- c(
 # sort()
 
 numberOfAccreditedLHDs <- sum(shapefile$is_accredited)
-accreditationPercent <- round(100 * numberOfAccreditedLHDs / nrow(shapefile), 1)
-numberOfAccreditedLHDs <- paste(numberOfAccreditedLHDs, " (", accreditationPercent, "%)", sep = "")
+# accreditationPercent <- round(100 * numberOfAccreditedLHDs / nrow(shapefile), 1)
+# numberOfAccreditedLHDs <- paste(numberOfAccreditedLHDs, " (", accreditationPercent, "%)", sep = "")
 # extra -------------------------------------------------------------------
 
 

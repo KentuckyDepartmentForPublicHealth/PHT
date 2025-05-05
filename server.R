@@ -25,7 +25,7 @@ server <- function(input, output, session) {
   output$my_value_box <- renderUI({
     layout_columns(
       value_box(
-        title = "Percentage of health departments who've submitted a Local Needs Assessment",
+        title = "Percentage of Kentucky Health Departments who've submitted a Local Needs Assessment",
         value = paste0(sprintf("%0.0f", prop.table(table(shapefile$Status))[[2]] * 100), "%"),
         theme = value_box_theme(
           bg = if (input$mode_toggle %in% "dark") chfs$cols9[2] else chfs$cols9[9],
@@ -47,7 +47,7 @@ server <- function(input, output, session) {
         height = NULL # Set height of the value box
       ),
       value_box(
-        title = "Number (percentage) of accredited local health departments",
+        title = "Number of accredited local health departments in Kentucky",
         value = numberOfAccreditedLHDs,
         theme = value_box_theme(
           bg = if (input$mode_toggle %in% "dark") chfs$cols9[2] else chfs$cols9[9],
