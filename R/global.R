@@ -36,6 +36,16 @@ chfs <- list(
   cols9 = c('#5CB2E5', '#0C3151', '#305E4C', '#76AB48','#00060C', '#305E4C', '#517F44', '#76AB48', '#9FCA70')
 )
 
+# timestamp
+# Read the timestamp that was saved by deploy.R
+currentDate <- tryCatch(
+  {
+    readRDS(file = "dat/currentDate.rds")
+  },
+  error = function(e) {
+    format(Sys.time(), "%a, %b %d, %Y at %I:%M %p %Z") # Fallback
+  }
+)
 
 # theme -------------------------------------------------------------------
 # my_theme <- bs_theme(5, bootswatch = 'sandstone')
