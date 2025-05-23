@@ -37,22 +37,6 @@ chfs <- list(
 )
 
 
-
-
-
-
-# deploy ------------------------------------------------------------------
-
-# currentDate <- format(Sys.time(), '%a, %b %d, %Y at %I:%M %p EDT')
-# saveRDS(currentDate, file = 'dat/currentDate.rds')
-currentDate <- readRDS(file = 'dat/currentDate.rds')
-
-# git_info <- system("git log -1 --format='%cd' --date=iso", intern = TRUE)
-# currentDate <- format(as.POSIXct(git_info), "%a, %b %d, %Y at %I:%M %p %Z")
-
-# rsconnect::deployApp(account = 'kdph', appName = 'pht-dashboard', appVisibility = 'public', logLevel = 'verbose')
-
-
 # theme -------------------------------------------------------------------
 # my_theme <- bs_theme(5, bootswatch = 'sandstone')
 
