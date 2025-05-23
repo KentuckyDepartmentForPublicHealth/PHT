@@ -536,7 +536,7 @@ chosen_qpal_var <- reactive({
     }
     
     # Validate name for safe characters
-    if (!grepl("^[A-Za-z0-9 ]+$", input$name)) {
+    if (!grepl("^[A-Za-z0-9 '-]+$", input$name)) {
       showNotification(
         ui = div(
           tags$b("Error:"),
